@@ -1,0 +1,4 @@
+Java
+Scanner
+Test
+100
