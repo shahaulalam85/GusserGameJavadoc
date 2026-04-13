@@ -1525,6 +1525,773 @@ AFTER:
 
 ```java 
 
+Same Method Name  +  Different Parameters  =  Method Overloading
+
+┌─────────────────────────────────────────────────────────┐
+│              VALID OVERLOADING CRITERIA                 │
+├─────────────────────────────────────────────────────────┤
+│  1. Number of parameters       add(int a)               │
+│                                add(int a, int b)        │
+├─────────────────────────────────────────────────────────┤
+│  2. Type of parameters         add(int a, int b)        │
+│                                add(double a, double b)  │
+├─────────────────────────────────────────────────────────┤
+│  3. Order of parameter types   add(int a, double b)     │
+│                                add(double a, int b)     │
+└─────────────────────────────────────────────────────────┘
+
+class Wrong {
+
+    int getValue() {
+        return 10;
+    }
+
+    // ❌ COMPILE ERROR — differs only in return type
+    double getValue() {
+        return 10.0;
+    }
+}
+
+class AlsoWrong {
+
+    void process(int a, int b) { }
+
+    // ❌ NOT overloading — parameter names don't matter, types are same
+    void process(int x, int y) { }
+}
+
+// Java's own println — massively overloaded
+System.out.println(42);
+System.out.println(true);
+System.out.println("text");
+System.out.println(3.14);
 
 
+// Without overloading — caller forced to cast
+double add(double a, double b) { return a + b; }
+
+int result = (int) add(2, 3);   // ugly, loses type safety
+
+// With overloading, each type gets a precise implementation:
+int    add(int a, int b)       { return a + b; }
+double add(double a, double b) { return a + b; }
+
+int    r1 = add(2, 3);       // clean
+double r2 = add(2.0, 3.0);   // clean
+
+byte → short → int → long → float → double
+        char ↗
+
+
+class TypePromo {
+
+    void display(long a) {
+        System.out.println("long: " + a);
+    }
+
+    public static void main(String[] args) {
+        TypePromo t = new TypePromo();
+
+        // No display(int) exists, so int is promoted to long
+        t.display(10);   // → long: 10
+    }
+}
+
+
+
+
+Method Call: add(5, 10)
+                  │
+                  ▼
+    ┌─────────────────────────────┐
+    │  Step 1: Exact type match?  │──── YES ──► Call that method
+    └─────────────────────────────┘
+                  │ NO
+                  ▼
+    ┌──────────────────────────────────┐
+    │  Step 2: Match via promotion?    │──── YES ──► Promote & call
+    └──────────────────────────────────┘
+                  │ NO
+                  ▼
+    ┌──────────────────────────────────┐
+    │  Step 3: Match via autoboxing?   │──── YES ──► Box/unbox & call
+    └──────────────────────────────────┘
+                  │ NO
+                  ▼
+    ┌──────────────────────────────────┐
+    │  Step 4: Match via varargs?      │──── YES ──► Use varargs
+    └──────────────────────────────────┘
+                  │ NO
+                  ▼
+          ❌ Compile Error:
+        "No suitable method found"
+
+
+class AutoBoxDemo {
+    public static void main(String[] args) {
+
+        int a = 10;
+
+        Integer obj = a;   // Autoboxing happens here
+
+        System.out.println(obj);
+    }
+}
+
+Integer obj = Integer.valueOf(a);
+So primitive int → wrapper Integer automatically.
+
+class AutoBoxDemo {
+    public static void main(String[] args) {
+
+        Integer a = 10;   // autoboxing
+        Integer b = 20;   // autoboxing
+
+        Integer sum = a + b;
+
+        System.out.println(sum);
+    }
+}
+
+Internal steps:
+a → unboxing → int
+b → unboxing → int
+addition happens
+result → boxing → Integer
+
+class AutoBoxDemo {
+
+    static void show(Integer x){
+        System.out.println("Wrapper: " + x);
+    }
+
+    static void show(int x){
+        System.out.println("Primitive: " + x);
+    }
+
+    public static void main(String[] args) {
+        show(5);
+    }
+}
+
+Output : Primitive: 5
+//Because exact primitive match wins over autoboxing.
+
+
+
+class VarDemo {
+
+    void display(int a) {
+        System.out.println("Single int: " + a);
+    }
+
+    void display(int... nums) {
+        System.out.println("Varargs called");
+        for (int n : nums) System.out.print(n + " ");
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        VarDemo v = new VarDemo();
+
+        v.display(5);        // → Single int: 5  (exact match wins over varargs)
+        v.display(1, 2, 3);  // → Varargs called: 1 2 3
+    }
+}
+
+
+class main {
+
+    static void show(int... x) {
+        System.out.println(x.length);
+    }
+
+    public static void main(String[] args) {
+        show(); // output : 0   // allowed
+        show(null); // not allowed, because null is ambiguous
+    }
+}
+
+Because internally: show(new int[]{}); // Varargs array created in heap.
+
+❌ Invalid Example
+void show(int... x, int y)  // ERROR
+Varargs must be last.
+show(String name, int... marks) // Valid
+
+
+class Demo {
+
+    static int sum(int... nums){
+        int total = 0;
+
+        for(int n : nums){
+            total += n;
+        }
+
+        return total;
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(sum(10,20)); // 30
+        System.out.println(sum(10,20,30)); // 60
+        System.out.println(sum(10,20,30,40)); // 100
+    }
+}
+
+
+class main {
+
+    static void show(String... x) {
+        if (x == null) {
+            System.out.println("x is null");
+        } else {
+            System.out.println("Length = " + x.length);
+        }
+    }
+
+    public static void main(String[] args) {
+
+        show();          // Length = 0
+        show("Java");    // Lehgth = 1
+        show("A", "B");   // Length = 2
+        show(null);      // x is null
+        show((String[]) null);  // x is null
+        show((String) null);    // Length = 1
+    }
+}
+👉 show(null) is ambiguous, so cast it to String or String[] to remove warning.
+
+1️⃣ show();
+show(new String[]{});
+
+2️⃣ show("Java");
+show(new String[]{"Java"});
+
+3️⃣ show("A","B");
+show(new String[]{"A","B"});
+
+4️⃣ show(null);
+show((String[]) null);
+→ array reference is null
+
+Important Notes for Exam 📝
+show()      → empty array
+show(null)  → null reference
+They are not same.
+
+Memory View
+show()       -> x → String[0]
+show(null)   -> x → null
+
+class PriorityDemo {
+
+    static void show(long x) {
+        System.out.println("Promotion");
+    }
+
+    static void show(Integer x) {
+        System.out.println("Autoboxing");
+    }
+
+    static void show(int... x) {
+        System.out.println("Varargs");
+    }
+
+    public static void main(String[] args) {
+        show(5); // Promotion
+    }
+}
+
+👉 Final Priority Order
+    Exact match
+        ↓
+    Type Promotion
+        ↓
+    Autoboxing
+        ↓
+    Varargs
+
+┌─────────────────────────────────────────────────────────┐
+│                  METHOD OVERLOADING                     │
+├──────────────────────┬──────────────────────────────────┤
+│  Also called         │  Compile-time / Static           │
+│                      │  Polymorphism                    │
+├──────────────────────┼──────────────────────────────────┤
+│  Where resolved      │  By compiler (before runtime)    │
+├──────────────────────┼──────────────────────────────────┤
+│  Valid differences   │  # of params, type, order        │
+├──────────────────────┼──────────────────────────────────┤
+│  NOT valid           │  Return type alone, param names  │
+├──────────────────────┼──────────────────────────────────┤
+│  Resolution order    │  Exact → Promote → Box → Varargs │
+└──────────────────────┴──────────────────────────────────┘
+
+| Term                          | Why Method Overloading is called this | Explanation                                               |
+| ----------------------------- | ------------------------------------- | --------------------------------------------------------- |
+| **Compile-time polymorphism** | Decision made at compile time         | Compiler decides which method to call before program runs |
+| **Static polymorphism**       | Behavior fixed at compile time        | No runtime decision; method resolved statically           |
+| **False polymorphism**        | Not true runtime polymorphism         | Same method name, but no dynamic behavior                 |
+| **Early binding**             | Binding happens early                 | Method call linked during compilation                     |
+| **Static binding**            | Binding based on static type          | Compiler binds method using reference type                |
+| **Static dispatch**           | Method dispatched statically          | No runtime dispatch like overriding                       |
+
+
+```
+
+## Parameter passing techniques
+
+```java 
+
+public class PrimitiveDemo {
+    public static void modify(int x) {
+        x = 100;  // Only modifies the local copy
+        System.out.println("Inside method: " + x);  // 100
+    }
+
+    public static void main(String[] args) {
+        int num = 10;
+        modify(num);
+        System.out.println("After method: " + num);  // Still 10 ✅
+    }
+}
+
+main()          modify()
+┌─────────┐     ┌─────────┐
+│ num = 10│────▶│ x = 10  │  ← copy
+└─────────┘     │ x = 100 │  ← only local change
+                └─────────┘
+
+
+class Person {
+    String name;
+    Person(String name) { 
+        this.name = name; 
+    }
+}
+
+public class ObjectDemo {
+    public static void modify(Person p) {
+        p.name = "Alice";  // Modifies the ACTUAL object on heap
+    }
+
+    public static void main(String[] args) {
+        Person person = new Person("Bob");
+        modify(person);
+        System.out.println(person.name);  // "Alice" — changed! ✅
+    }
+}
+
+Stack                      Heap
+┌──────────────┐           ┌──────────────────┐
+│ person  ─────┼──────────▶│ Person{name="Bob"}│
+└──────────────┘     ┌────▶└──────────────────┘
+┌──────────────┐     │
+│ p (copy) ───-┼─────┘    Both point to same object!
+└──────────────┘
+
+
+public static void reassign(Person p) {
+    p = new Person("Charlie");  // p now points to a NEW object
+    System.out.println("Inside: " + p.name);  // "Charlie"
+}
+
+public static void main(String[] args) {
+    Person person = new Person("Bob");
+    reassign(person);
+    System.out.println("Outside: " + person.name);  // Still "Bob" ✅
+}
+
+Stack                      Heap
+┌──────────────┐           ┌──────────────────────┐
+│ person  ─────┼──────────▶│ Person{name="Bob"}   │  ← original
+└──────────────┘           └──────────────────────┘
+
+┌──────────────┐           ┌──────────────────────┐
+│ p (copy) ────┼──────────▶│Person{name="Charlie"}│ ← new object
+└──────────────┘           └──────────────────────┘
+
+public static void modify(int[] arr) {
+    arr[0] = 999;      // Modifies original array ✅
+}
+
+public static void reassign(int[] arr) {
+    arr = new int[]{1, 2, 3};  // Only changes local copy ❌
+}
+
+public static void main(String[] args) {
+    int[] data = {10, 20, 30};
+    modify(data);
+    System.out.println(data[0]);  // 999
+
+    reassign(data);
+    System.out.println(data[0]);  // Still 999
+}
+
+
+
+
+```
+
+## Wrapper Classes
+```java
+List<int> list = new ArrayList<>();       // ❌ Compile error
+List<Integer> list = new ArrayList<>();   // ✅ Works
+
+// T must be an object — primitives aren't allowed
+public <T> void print(T value) { ... }
+
+
+int x = null;       // ❌ Primitives can't be null
+Integer x = null;   // ✅ Objects can be null (useful for optional values in DB, APIs)
+
+Integer.parseInt("42");       // String → int
+Integer.toBinaryString(10);   // "1010"
+Integer.MAX_VALUE;            // 2147483647
+
+Integer a = new Integer(5);
+Integer b = new Integer(5);
+System.out.println(a == b); // false ❌ — two different objects
+
+
+
+Integer a = Integer.valueOf(5);
+Integer b = Integer.valueOf(5);
+System.out.println(a == b); // true ✅ — same cached object
+
+Integer x = Integer.valueOf(200);
+Integer y = Integer.valueOf(200);
+System.out.println(x == y); // false — outside cache range, new object
+
+
+
+// Simplified version of what Java does internally in valueOf()
+public static Integer valueOf(int i) {
+    if (i >= -128 && i <= 127) {
+        return IntegerCache.cache[i + 128]; // return existing object
+    }
+    return new Integer(i); // only creates new if outside range
+}
+
+Integer x = 5; // autoboxing → compiler converts this to Integer.valueOf(5)
+
+int a = 5;
+Integer obj = a;   // compiler does: Integer obj = Integer.valueOf(a);
+
+Integer obj = 10;
+int b = obj;       // compiler does: int b = obj.intValue();
+
+
+
+// Simplified source of Integer class
+public final class Integer extends Number {
+    
+    private final int value;  // ← the primitive is stored here
+    
+    // valueOf() sets this field
+    private Integer(int value) {
+        this.value = value;
+    }
+
+    // intValue() just returns that stored primitive
+    public int intValue() {
+        return value;  // ← literally just this
+    }
+}
+
+
+
+Integer obj = Integer.valueOf(42);  // primitive 42 wrapped inside an object
+int x = obj.intValue();             // unwrap → get primitive 42 back
+System.out.println(x); // 42
+
+
+Integer obj = Integer.valueOf(65);
+
+obj.intValue()    // 65      (int)
+obj.doubleValue() // 65.0    (double)
+obj.floatValue()  // 65.0    (float)
+obj.longValue()   // 65L     (long)
+obj.byteValue()   // 65      (byte)
+obj.shortValue()  // 65      (short)
+
+
+
+// Simplified source inside Integer class
+public boolean equals(Object obj) {
+    if (obj instanceof Integer) {
+        return value == ((Integer) obj).intValue();
+        //     ↑ my primitive    ↑ extract their primitive → compare
+    }
+    return false;
+}
+
+
+
+Integer a = Integer.valueOf(100);
+Integer b = Integer.valueOf(100);
+System.out.println(a == b);      // true  ✅ (cached range -128 to 127)
+
+Integer x = Integer.valueOf(200);
+Integer y = Integer.valueOf(200);
+System.out.println(x == y);      // false ❌ (outside cache, different objects)
+System.out.println(x.equals(y)); // true  ✅ (always compares value)
+
+
+
+Integer.parseInt("42");           // String → int
+Integer.valueOf(42);              // int → Integer (uses cache)
+Integer.toString(42);             // int → String
+Integer.toBinaryString(10);       // "1010"
+Integer.toHexString(255);         // "ff"
+Integer.toOctalString(8);         // "10"
+Integer.max(3, 7);                // 7
+Integer.min(3, 7);                // 3
+Integer.sum(3, 7);                // 10
+Integer.compare(3, 7);            // negative (3 < 7)
+Integer.bitCount(7);              // 3 (number of 1-bits in 0111)
+Integer.reverse(1);               // reverses bits
+Integer.MAX_VALUE;                // 2147483647
+Integer.MIN_VALUE;                // -2147483648
+
+Double.parseDouble("3.14");
+Double.isNaN(0.0 / 0.0);         // true
+Double.isInfinite(1.0 / 0.0);    // true
+Double.MAX_VALUE;
+Double.MIN_VALUE;                 // smallest positive (not most negative!)
+
+
+Character.isDigit('5');           // true
+Character.isLetter('A');          // true
+Character.isLetterOrDigit('_');   // false
+Character.isWhitespace(' ');      // true
+Character.isUpperCase('A');       // true
+Character.isLowerCase('a');       // true
+Character.toUpperCase('a');       // 'A'
+Character.toLowerCase('A');       // 'a'
+Character.getNumericValue('9');   // 9
+
+
+Boolean.parseBoolean("true");     // true
+Boolean.parseBoolean("yes");      // false (only "true" matches, case-insensitive)
+Boolean.toString(true);           // "true"
+Boolean.logicalAnd(true, false);  // false
+Boolean.logicalOr(true, false);   // true
+Boolean.logicalXor(true, false);  // true
+
+Wrapper objects carry overhead — they live on the heap, not the stack.
+
+// ❌ Slow — creates thousands of Integer objects on heap
+Long sum = 0L;
+for (long i = 0; i < 1_000_000; i++) {
+    sum += i;   // unboxing + addition + autoboxing every iteration!
+}
+
+// ✅ Fast — stays on stack
+long sum = 0L;
+for (long i = 0; i < 1_000_000; i++) {
+    sum += i;
+}
+
+Rule of thumb: use primitives for computation, use wrappers when 
+the API demands objects (Collections, Generics, nullable fields).
+
+
+
+```
+
+## familly ownership tree
+
+```java 
+
+java.lang.Object
+    └── java.lang.Number  (abstract)
+            ├── Integer
+            ├── Long
+            ├── Double
+            ├── Float
+            ├── Byte
+            └── Short
+
+java.lang.Object
+    ├── Boolean    (separate — not numeric)
+    └── Character  (separate — not numeric)
+
+
+
+
+java.lang.Object
+│
+└── java.lang.Number  (abstract)
+        │
+        ├── java.lang.Integer
+        │       ├── Fields
+        │       │     ├── MIN_VALUE = -2,147,483,648
+        │       │     ├── MAX_VALUE =  2,147,483,647
+        │       │     ├── SIZE     = 32  (bits)
+        │       │     ├── BYTES    = 4
+        │       │     └── TYPE     = int.class
+        │       │
+        │       ├── Core Methods (from Number)
+        │       │     ├── intValue()
+        │       │     ├── longValue()
+        │       │     ├── floatValue()
+        │       │     ├── doubleValue()
+        │       │     ├── byteValue()
+        │       │     └── shortValue()
+        │       │
+        │       ├── Static Utility Methods
+        │       │     ├── valueOf(int i)
+        │       │     ├── valueOf(String s)
+        │       │     ├── parseInt(String s)
+        │       │     ├── parseInt(String s, int radix)
+        │       │     ├── toBinaryString(int i)
+        │       │     ├── toOctalString(int i)
+        │       │     ├── toHexString(int i)
+        │       │     ├── compare(int x, int y)
+        │       │     ├── max(int a, int b)
+        │       │     ├── min(int a, int b)
+        │       │     └── sum(int a, int b)
+        │       │
+        │       └── Object Methods (overridden)
+        │             ├── equals(Object obj)
+        │             ├── hashCode()
+        │             ├── toString()
+        │             └── compareTo(Integer another)
+        │
+        ├── java.lang.Long
+        │       ├── Fields
+        │       │     ├── MIN_VALUE = -9,223,372,036,854,775,808
+        │       │     ├── MAX_VALUE =  9,223,372,036,854,775,807
+        │       │     ├── SIZE     = 64  (bits)
+        │       │     └── BYTES    = 8
+        │       │
+        │       ├── Core Methods (from Number)
+        │       │     ├── intValue()
+        │       │     ├── longValue()
+        │       │     ├── floatValue()
+        │       │     └── doubleValue()
+        │       │
+        │       └── Static Utility Methods
+        │             ├── valueOf(long l)
+        │             ├── parseLong(String s)
+        │             ├── toBinaryString(long i)
+        │             ├── toHexString(long i)
+        │             ├── compare(long x, long y)
+        │             ├── max(long a, long b)
+        │             ├── min(long a, long b)
+        │             └── sum(long a, long b)
+        │
+        ├── java.lang.Double
+        │       ├── Fields
+        │       │     ├── MIN_VALUE =  4.9E-324
+        │       │     ├── MAX_VALUE =  1.7976931348623157E308
+        │       │     ├── NaN
+        │       │     ├── POSITIVE_INFINITY
+        │       │     ├── NEGATIVE_INFINITY
+        │       │     ├── SIZE     = 64  (bits)
+        │       │     └── BYTES    = 8
+        │       │
+        │       ├── Core Methods (from Number)
+        │       │     ├── intValue()       ← truncates decimal
+        │       │     ├── longValue()
+        │       │     ├── floatValue()
+        │       │     └── doubleValue()    ← direct return
+        │       │
+        │       └── Static Utility Methods
+        │             ├── valueOf(double d)
+        │             ├── parseDouble(String s)
+        │             ├── isNaN(double v)
+        │             ├── isInfinite(double v)
+        │             ├── isFinite(double d)
+        │             ├── compare(double d1, double d2)
+        │             ├── max(double a, double b)
+        │             ├── min(double a, double b)
+        │             └── sum(double a, double b)
+        │
+        ├── java.lang.Float
+        │       ├── Fields
+        │       │     ├── MIN_VALUE =  1.4E-45
+        │       │     ├── MAX_VALUE =  3.4028235E38
+        │       │     ├── NaN
+        │       │     ├── POSITIVE_INFINITY
+        │       │     ├── NEGATIVE_INFINITY
+        │       │     ├── SIZE     = 32  (bits)
+        │       │     └── BYTES    = 4
+        │       │
+        │       ├── Core Methods (from Number)
+        │       │     ├── intValue()
+        │       │     ├── longValue()
+        │       │     ├── floatValue()     ← direct return
+        │       │     └── doubleValue()
+        │       │
+        │       └── Static Utility Methods
+        │             ├── valueOf(float f)
+        │             ├── parseFloat(String s)
+        │             ├── isNaN(float v)
+        │             ├── isInfinite(float v)
+        │             ├── compare(float f1, float f2)
+        │             ├── max(float a, float b)
+        │             ├── min(float a, float b)
+        │             └── sum(float a, float b)
+        │
+        ├── java.lang.Byte
+        │       ├── Fields
+        │       │     ├── MIN_VALUE = -128
+        │       │     ├── MAX_VALUE =  127
+        │       │     ├── SIZE     = 8   (bits)
+        │       │     └── BYTES    = 1
+        │       │
+        │       ├── Core Methods (from Number)
+        │       │     ├── intValue()
+        │       │     ├── longValue()
+        │       │     ├── floatValue()
+        │       │     └── doubleValue()
+        │       │
+        │       └── Static Utility Methods
+        │             ├── valueOf(byte b)
+        │             ├── parseByte(String s)
+        │             └── compare(byte x, byte y)
+        │
+        └── java.lang.Short
+                ├── Fields
+                │     ├── MIN_VALUE = -32,768
+                │     ├── MAX_VALUE =  32,767
+                │     ├── SIZE     = 16  (bits)
+                │     └── BYTES    = 2
+                │
+                ├── Core Methods (from Number)
+                │     ├── intValue()
+                │     ├── longValue()
+                │     ├── floatValue()
+                │     └── doubleValue()
+                │
+                └── Static Utility Methods
+                      ├── valueOf(short s)
+                      ├── parseShort(String s)
+                      └── compare(short x, short y)
+
+
+
+         Number  (abstract class)
+           |
+    ┌──────┼──────┬──────┬──────┐
+ Integer Long  Double Float  Byte  Short
+
+
+ java.lang.Object
+    └── java.lang.Number  (abstract)
+            ├── Integer
+            ├── Long
+            ├── Double
+            ├── Float
+            ├── Byte
+            └── Short
+
+java.lang.Object
+    ├── Boolean    (separate — not numeric)
+    └── Character  (separate — not numeric)
+
+    
 ```
