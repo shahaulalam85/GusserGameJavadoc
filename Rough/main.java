@@ -1,18 +1,33 @@
 
-public class main {
+import java.util.Scanner;
+
+class main {
 
     public static void main(String[] args) {
-        Integer obj = Integer.valueOf(675656);
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter number of Classrooms: ");
+        int classroom = scan.nextInt();
+        int[][] a = new int[classroom][];
+        for (int i = 0; i < classroom; i++) {
+            System.out.println("Number of student in classroom no. " + i);
+            int students = scan.nextInt();
+            a[i] = new int[students];
+        }
 
-        obj.doubleValue(); // 65.0    (double)
-        obj.floatValue();  // 65.0    (float)
-        obj.longValue();   // 65L     (long)
-        obj.byteValue();   // 65      (byte)
-        obj.shortValue();  // 65      (short)
-        System.out.println(obj.intValue());    // 65      (int)
-        System.out.println(obj.floatValue());    // 65      (int)
-        System.out.println(obj.longValue());    // 65      (int)
-        System.out.println(obj.byteValue());    // 65      (int)
-        System.out.println(obj.shortValue());    // 65      (int)
+        // Input of arrays
+        for (int i = 0; i < classroom; i++) {
+            for (int j = 0; j < a[i].length; j++) {
+                a[i][j] = scan.nextInt();
+            }
+        }
+
+        // Printing the array
+        for (int i = 0; i < classroom; i++) {
+            System.err.print("Classroom " + i + ": ");
+            for (int j = 0; j < a[i].length; j++) {
+                System.out.print(a[i][j] + " ");
+            }
+            System.err.println("");
+        }
     }
 }

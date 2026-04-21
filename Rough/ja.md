@@ -2293,5 +2293,1033 @@ java.lang.Object
     ├── Boolean    (separate — not numeric)
     └── Character  (separate — not numeric)
 
-    
+
+public abstract class Number {
+    public abstract int     intValue();
+    public abstract long    longValue();
+    public abstract float   floatValue();
+    public abstract double  doubleValue();
+
+    // non-abstract (has default impl)
+    public byte  byteValue()  { return (byte)  intValue(); }
+    public short shortValue() { return (short) intValue(); }
+}
+
+Number n1 = Integer.valueOf(42);
+Number n2 = Double.valueOf(3.14);
+Number n3 = Long.valueOf(100L);
+
+// call intValue() on any of them — works for all
+System.out.println(n1.intValue()); // 42
+System.out.println(n2.intValue()); // 3  (truncated)
+System.out.println(n3.intValue()); // 100
+System.out.println(n1); // 42
+System.out.println(n2); // 3.14
+System.out.println(n3); // 100
+
+
+public class Main
+{
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+
+        
+		Integer a = 6578;
+		Integer b = 6578;
+		System.out.println(a.equals(b)); //true
+		System.out.println(a == b); // false
+		System.out.println(a); // 6578
+		System.out.println(a.toString()); // 6578
+		System.out.println(a.hashCode()); // 6578
+		System.out.println(System.identityHashCode(a)); // 724542711
+		System.out.println(a.getClass()); // class java.lang.Integer
+		System.out.println(a.getClass().getName()); // java.lang.Integer
+		System.out.println(Integer.toHexString(a)); // 19b2
+		System.out.println(a.toHexString(a)); // 19b2
+		System.out.println(a.floatValue()); // 6578.0
+		int x = a.intValue();
+		float y = a.floatValue();
+		System.out.println(x); // 6578
+		System.out.println(y); // 6578.0
+		
+		Character c1 = Character.valueOf((char)65);
+		Character c2 = Character.valueOf((char)65);
+		System.out.println(c1==c2); // true
+		
+		Character c3 = Character.valueOf((char)128);
+		Character c4 = Character.valueOf((char)128);
+		System.out.println(c3==c4); // false
+		
+		Character c5 = Character.valueOf((char)127);
+		Character c6 = Character.valueOf((char)127);
+		System.out.println(c5==c6); // true
+		
+		Character c7 = Character.valueOf((char)-128);
+		Character c8 = Character.valueOf((char)-128);
+		System.out.println(c7==c8); // false
+		
+		
+		Boolean b1 = Boolean.valueOf(true);
+		Boolean b2 = Boolean.valueOf(true);
+		System.out.println(b1==b2); // true
+		
+		
+
+	}
+}
+
+```
+
+```java 
+
+Integer i = 10;
+Integer j = 20;
+Integer k = i + j;
+System.out.println(k); // 30
+
+What actually happens here:
+Integer i = 10;        →  autoboxing:   i = Integer.valueOf(10)
+Integer j = 20;        →  autoboxing:   j = Integer.valueOf(20)
+Integer k = i + j;     →  unboxing both → 10 + 20 = 30 → autobox → Integer.valueOf(30)
+
+Integer a = 10;
+Integer b = a;
+++a; // a = Integer.valueOf(a.intValue() + 1); 
+the result back into a brand-new Integer object and assigns it to a.
+System.out.println(a == b);      // false
+System.out.println(a.equals(b)); // false
+
+
+++a; // a = Integer.valueOf(a.intValue() + 1); 
+then boxes the result back into a brand-new Integer object and assigns it to 'a'.
+
+Integer a = 10;   →  a ──→ [ 10 ]   (object on heap)
+Integer b = a;    →  b ──→ [ 10 ]   (SAME object, both point to it)
+++a;
+
+Instead, the JVM translates ++a into this behind the scenes:
+a = Integer.valueOf(a.intValue() + 1);
+
+It unboxes a to int, adds 1, then boxes the result back into 
+a brand-new Integer object and assigns it to 'a'.
+
+
+
+++a  ≡  a = Integer.valueOf(a + 1)
+              ↓ unbox → 10+1=11 → rebox
+a ──→ [ 11 ]   ← NEW object
+b ──→ [ 10 ]   ← old object, unchanged
+
+
+Integer m = 499;
+Integer n = m;
+System.out.println(m == n); // true 
+
+Integer m = 499;   →  m ──→ [ 499 ]
+Integer n = m;     →  n ──→ [ 499 ]  ← same object as m
+m == n             →  same reference → true ✅
+
+Integer a = 10 ;
+Integer b = a;
+a++; // wrapper class are immutable creates a new object a = 11;
+System.out.println(a==b); // false 
+System.out.println(a.equals(b)); // false 
+System.out.println(a); // 11 (not 10) => it is a new object
+System.out.println(b); // 10
+		
+Integer x = 10;
+int y = 20;
+int z = x+y;
+Integer w = x + y;
+System.out.println(z); // 30
+System.out.println(w); // 30
+
+x (Integer) ──unbox──→ 10
+                         \
+                          + ──→ 30 ──→ int z = 30
+                         /
+y (int) ────────────→ 20
+
+Integer x = 10         int y = 20
+     │                       │
+     │  (heap object)        │  (stack primitive)
+     │                       │
+     └──── unbox ────────────┘
+           x.intValue()
+                │
+              10 + 20
+                │
+               30  ← primitive result
+                │
+        ┌───────┴────────┐
+        │                │
+    int z = 30      Integer w = 30
+    (no boxing)     Integer.valueOf(30)
+                    (autoboxing → heap object)
+
+int a       = 1000;
+Integer b   = 1000;
+Integer c   = 1000;
+
+a == b   // true  ← primitive vs wrapper → unbox → 1000 == 1000
+b == c   // false ← wrapper vs wrapper  → reference check → different objects
+a == c   // true  ← primitive vs wrapper → unbox → 1000 == 1000
+
+static void show(int x)     { System.out.println("int"); }
+static void show(Integer x) { System.out.println("Integer"); }
+
+Integer a = 10;
+Integer b = 20;
+show(a + b);   // prints "int" ← a+b unboxes both, result is primitive int
+show(a);       // prints "Integer"
+
+Integer a = null;
+Integer b = null;
+System.out.println(a == b);  // true ✅
+
+
+```
+```java 
+
+🧱 Declaration
+int[] arr;          // preferred style
+int arr[];          // C-style (valid but discouraged)
+
+
+🧱 Initialization
+// 1. Declare + allocate
+int[] arr = new int[5];         // default values: 0
+
+// 2. Declare + allocate + assign
+int[] arr = new int[]{1, 2, 3, 4, 5};
+
+// 3. Shorthand literal
+int[] arr = {1, 2, 3, 4, 5};
+
+
+
+
+🔁 6. Traversing an Array
+
+int[] arr = {1, 2, 3, 4, 5};
+
+// 1. Classic for loop
+for (int i = 0; i < arr.length; i++) {
+    System.out.print(arr[i] + " ");
+}
+
+// 2. Enhanced for-each (read-only)
+for (int x : arr) {
+    System.out.print(x + " ");
+}
+
+// 3. Java 8+ streams
+Arrays.stream(arr).forEach(x -> System.out.print(x + " "));
+
+```
+
+```java
+
+int[] arr = {10, 20, 30, 40, 50};
+
+STACK                        HEAP
+┌──────────────┐             ┌────────────────────────────────────────-----─┐
+│ arr  → ref   │────────────►│ [header | length=5 | 10 | 20 | 30 | 40 | 50] │
+└──────────────┘             └────────────────────────────────────────-----─┘
+
+
+Array Object Layout in Heap Memory
+┌──────────────────────┐
+│   Object Header      │  ← 12 bytes (mark word + class pointer)
+├──────────────────────┤
+│   length field       │  ← 4 bytes (stores arr.length)
+├──────────────────────┤
+│   element[0]         │  ← index 0
+│   element[1]         │  ← index 1
+│   element[2]         │  ← index 2
+│      ...             │
+│   element[n-1]       │  ← last element
+└──────────────────────┘
+
+STACK                        HEAP
+──────                       ──────────────────────────────────────
+                             ┌────────────────────────────────────┐
+                             │         OBJECT HEADER              │  ← 12 bytes (mark word + class pointer)
+                             │  ┌────────────────────────────┐    │
+arr  ──────────────────────► │  │  Mark Word      (8 bytes)  │    │
+[reference]                  │  │  hash | GC age | lock info │    │
+                             │  ├────────────────────────────┤    │
+                             │  │  Class Pointer  (4 bytes)  │    │
+                             │  │  → points to int[] metadata│    │
+                             │  └────────────────────────────┘    │
+                             ├────────────────────────────────────┤
+                             │  Array Length:  5      (4 bytes)   │
+                             ├────────────────────────────────────┤
+                             │  arr[0]  =  10         (4 bytes)   │
+                             │  arr[1]  =  20         (4 bytes)   │
+                             │  arr[2]  =  30         (4 bytes)   │
+                             │  arr[3]  =  40         (4 bytes)   │
+                             │  arr[4]  =  50         (4 bytes)   │
+                             └────────────────────────────────────┘
+                             Total ≈ 8 + 4 + 4 + 20 = 36 bytes
+                             (aligned to 40 bytes with padding)
+
+
+
+
+```
+## primitive vs object array
+```java
+
+Primitive int[]:                    Object Integer[]:
+
+┌───┬───┬───┬───┬───┐              ┌──────┬──────┬──────┬──────┬──────┐
+│ 10│ 20│ 30│ 40│ 50│              │ ref0 │ ref1 │ ref2 │ ref3 │ ref4 │
+└───┴───┴───┴───┴───┘              └──┬───┴──┬───┴──┬───┴──┬───┴──┬───┘
+  values live HERE                    │      │      │      │      │
+                                      ▼      ▼      ▼      ▼      ▼
+                                    [10]   [20]   [30]   [40]   [50]
+                                    objects elsewhere on heap
+
+
+
+int[]     primitive = {10, 20, 30};
+Integer[] object    = {10, 20, 30};
+
+STACK
+┌──────────────────┐
+│ primitive → ref  │──────────────────────────────────────────────────┐
+│ object    → ref  │─────────┐                                        │
+└──────────────────┘         │                                        │
+                             │                                        │
+HEAP                         ▼                                        ▼
+
+Integer[] object:                           int[] primitive:
+┌─────────┬──────┬───────┬───────┬───────┐  ┌─────────┬──────┬────┬────┬────┐
+│ Header  │ len=3│ ref_0 │ ref_1 │ ref_2 │  │ Header  │ len=3│ 10 │ 20 │ 30 │
+└─────────┴──────┴───┬───┴───┬───┴───┬───┘  └─────────┴──────┴────┴────┴────┘
+                     │       │       │                          |
+          ┌──────────┘    ┌──┘       └──────────┐               |
+          ▼               ▼                     ▼               |
+   ┌────────────┐  ┌────────────┐        ┌────────────┐         |
+   │ Header     │  │ Header     │        │ Header     │         |
+   │ intValue=10│  │ intValue=20│        │ intValue=30│         |
+   └────────────┘  └────────────┘        └────────────┘         |
+                                                                ▼
+   Each Integer object = 16 bytes                 int[] element = 4 bytes each
+
+int[]     a = new int[1000];      
+// 12 (header) + 4 (length) + 1000×4 = ~4016 bytes
+
+Integer[] b = new Integer[1000];  
+// 12 + 4 + 1000×4 (refs) + 1000×16 (objects) = ~20016 bytes
+
+
+int[]     primitive = new int[3];     // → [0, 0, 0]   (zeroed by JVM)
+Integer[] object    = new Integer[3]; // → [null, null, null]
+
+int[3] after new:             Integer[3] after new:
+┌────┬────┬────┐              ┌──────┬──────┬──────┐
+│  0 │  0 │  0 │              │ null │ null │ null │
+└────┴────┴────┘              └──────┴──────┴──────┘
+  values are 0                 references point nowhere (0x00000000)
+
+
+Integer[] arr = new Integer[3];
+arr[0] = 42;
+// arr[1] is still null
+
+System.out.println(arr[0] + 1);  // 43  — fine
+System.out.println(arr[1] + 1);  // NullPointerException!
+
+
+Integer[] arr = new Integer[3];
+
+arr[0] = 10;  // autoboxing: JVM calls Integer.valueOf(10) behind the scenes
+              // a new Integer object is created on the heap
+
+int x = arr[0];  // unboxing: JVM calls arr[0].intValue()
+                 // extracts the int from the Integer object
+
+
+
+Integer[] arr = new Integer[4];
+arr[0] = 100;   // returns cached object
+arr[1] = 100;   // returns SAME cached object → arr[0] == arr[1] is true
+arr[2] = 200;   // creates new object
+arr[3] = 200;   // creates another new object → arr[2] == arr[3] is false!
+
+System.out.println(arr[0] == arr[1]);  // true  (same cached reference)
+System.out.println(arr[2] == arr[3]);  // false (different heap objects)
+System.out.println(arr[2].equals(arr[3]));  // true (same value)
+
+```
+## parameter passing techniques to methods
+
+```java 
+
+static void doubleAll(int[] arr) {
+    for (int i = 0; i < arr.length; i++)
+        arr[i] *= 2;
+}
+
+public static void main(String[] args) {
+    int[] data = {1, 2, 3};
+    doubleAll(data);
+    System.out.println(Arrays.toString(data)); // [2, 4, 6]
+}
+
+
+
+
+@returning 
+
+static int[] buildArray(int n) {
+    int[] result = new int[n];
+    for (int i = 0; i < n; i++) result[i] = i * i;
+    return result;
+}
+
+int[] squares = buildArray(5);
+// squares = [0, 1, 4, 9, 16]
+
+
+
+
+static void modify(int[] a) {
+    a[0] = 10;
+}
+
+public static void main(String[] args) {
+    int[] arr = {1, 2, 3, 4, 5};
+    modify(arr);
+    System.out.println(arr[0]); // prints 10
+}
+
+
+
+STACK (main)              HEAP
+┌─────────────────┐       ┌────────┬───┬───┬───┬───┬───┐
+│ arr │ ref:0x100 │──────►│ header │ 1 │ 2 │ 3 │ 4 │ 5 │
+└─────────────────┘       └────────┴───┴───┴───┴───┴───┘
+                           address: 0x100
+
+
+@ a[0] = 10 executes inside modify()
+
+STACK (main)              HEAP
+┌─────────────────┐       ┌────────┬────┬───┬───┬───┬───┐
+│ arr │ ref:0x100 │──────►│ header │ 10 │ 2 │ 3 │ 4 │ 5 │
+└─────────────────┘       └────────┴────┴───┴───┴───┴───┘
+                                ▲     ▲
+STACK (modify)                  │     │
+┌─────────────────┐             │     └── a[0] = 10 wrote here
+│  a  │ ref:0x100 │─────────────┘
+└─────────────────┘
+
+
+@ modify() returns, its stack frame is destroyed
+
+STACK (main)              HEAP
+┌─────────────────┐       ┌────────┬────┬───┬───┬───┬───┐
+│ arr │ ref:0x100 │──────►│ header │ 10 │ 2 │ 3 │ 4 │ 5 │
+└─────────────────┘       └────────┴────┴───┴───┴───┴───┘
+
+  'a' is gone — its stack frame was popped.
+  But the heap object remains, with the modified value.
+
+
+```
+
+
+```java
+
+static void reassign(int[] arr) {
+    arr = new int[]{99, 99, 99}; // creates a NEW array on heap
+    // arr now points to the new object, original is unchanged
+}
+
+public static void main(String[] args) {
+    int[] data = {1, 2, 3};
+    reassign(data);
+    System.out.println(Arrays.toString(data));
+    // Output: [1, 2, 3]  ← original untouched
+}
+
+Step 1 — Array created in main()
+
+STACK (main)               HEAP
+┌──────────────────┐       ┌────────┬───┬───┬───┐
+│ data │ ref:0x100 │──────►│ header │ 1 │ 2 │ 3 │
+└──────────────────┘       └────────┴───┴───┴───┘
+                             address: 0x100
+
+Step 2 — reassign(data) is called
+
+STACK (main)               HEAP
+┌──────────────────┐       ┌────────┬───┬───┬───┐
+│ data │ ref:0x100 │──────►│ header │ 1 │ 2 │ 3 │
+└──────────────────┘       └────────┴───┴───┴───┘
+                                 ▲
+STACK (reassign)                 │
+┌──────────────────┐             │
+│ arr  │ ref:0x100 │─────────────┘
+└──────────────────┘
+
+  arr is a COPY of data's address.
+  They point to the same heap object — but are independent variables.
+
+
+```
+
+```java 
+
+Step 3 — arr = new int[]{99, 99, 99} executes
+
+STACK (main)               HEAP
+┌──────────────────┐       ┌────────┬───┬───┬───┐
+│ data │ ref:0x100 │──────►│ header │ 1 │ 2 │ 3 │  ← completely untouched
+└──────────────────┘       └────────┴───┴───┴───┘
+                             address: 0x100
+
+STACK (reassign)               HEAP
+┌──────────────────┐       ┌────────┬────┬────┬────┐
+│ arr  │ ref:0x200 │──────►│ header │ 99 │ 99 │ 99 │  ← new object
+└──────────────────┘       └────────┴────┴────┴────┘
+                             address: 0x200
+
+  arr's local copy of the address changed from 0x100 → 0x200.
+  data still holds 0x100. It has no idea arr was reassigned.
+
+
+```
+```java 
+Step 4 — reassign() returns, its stack frame is destroyed
+
+STACK (main)               HEAP
+┌──────────────────┐       ┌────────┬───┬───┬───┐
+│ data │ ref:0x100 │──────►│ header │ 1 │ 2 │ 3 │
+└──────────────────┘       └────────┴───┴───┴───┘
+
+                            ┌────────┬────┬────┬────┐
+                            │ header │ 99 │ 99 │ 99 │  ← orphaned!
+                            └────────┴────┴────┴────┘
+                                address: 0x200
+                                no variable points here anymore
+                                → eligible for Garbage Collection
+
+
+
+static int[] square(int[] arr) {
+    int[] result = new int[arr.length];
+    for (int i = 0; i < arr.length; i++) {
+        result[i] = arr[i] * arr[i];
+    }
+    return result;
+}
+
+public static void main(String[] args) {
+    int[] nums  = {1, 2, 3, 4, 5};
+    int[] squares = square(nums);
+    System.out.println(Arrays.toString(squares));
+    // Output: [1, 4, 9, 16, 25]
+    System.out.println(Arrays.toString(nums));
+    // Output: [1, 2, 3, 4, 5]  ← original unchanged
+}
+
+
+String[] names = {"Alice", "Bob", "Charlie"};
+
+HEAP
+
+names array object:
+┌────────────┬──────────┬──────────┬──────────┬──────────┐
+│   Header   │ length=3 │  ref_0   │  ref_1   │  ref_2   │
+└────────────┴──────────┴────┬─────┴────┬─────┴────┬─────┘
+                              │          │          │
+               ┌──────────────┘          │          └──────────────┐
+               ▼                         ▼                         ▼
+         ┌──────────┐             ┌──────────┐             ┌──────────┐
+         │ "Alice"  │             │  "Bob"   │             │"Charlie" │
+         └──────────┘             └──────────┘             └──────────┘
+
+
+String[] names = {"Alice", "Bob", "Charlie"};
+
+// Length of the array (how many strings)
+System.out.println(names.length);        // 3
+
+// Length of a specific string
+System.out.println(names[0].length());   // 5  ("Alice")
+System.out.println(names[2].length());   // 7  ("Charlie")
+
+
+
+```
+
+## 2d arrays 
+
+```java 
+
+
+int[][] matrix = new int[3][3];
+
+HEAP — outer array at 0x100
+┌─────────┬───────┬──────┬──────┬──────┐
+│ header  │ len=3 │ null │ null │ null │
+└─────────┴───────┴──────┴──────┴──────┘
+
+  matrix[0] returns null (ref = 0x00000000)
+  matrix[0][0] tries to follow null → NullPointerException
+
+HEAP
+
+0x200               0x300               0x400
+┌──────┬───┬───┬───┐ ┌──────┬───┬───┬───┐ ┌──────┬───┬───┬───┐
+│len=3 │ 0 │ 0 │ 0 │ │len=3 │ 0 │ 0 │ 0 │ │len=3 │ 0 │ 0 │ 0 │
+└──────┴───┴───┴───┘ └──────┴───┴───┴───┘ └──────┴───┴───┴───┘
+  row 0                row 1                row 2
+  All slots are zero-initialized by the JVM.
+
+--------------------------------------------------------------------------------
+
+int[][] matrix = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+STACK (main)
+┌────────────────────┐
+│ matrix │ ref:0x100 │
+└────────────────────┘
+         │
+         ▼
+HEAP — the outer array (int[][]) at 0x100
+┌─────────┬────────┬─────────┬─────────┬─────────┐
+│ header  │ len=3  │ ref:200 │ ref:300 │ ref:400 │
+└─────────┴────────┴────┬────┴────┬────┴────┬────┘
+                        │         │          │
+         ┌──────────────┘         │          └──────────────┐
+         ▼                        ▼                         ▼
+    0x200 — row 0               0x300 — row 1             0x400 — row 2
+┌──────┬──────┬───┬───┬───┐ ┌──────┬──────┬───┬───┬───┐ ┌──────┬──────┬───┬───┬───┐
+│header│ len=3│ 1 │ 2 │ 3 │ │header│ len=3│ 4 │ 5 │ 6 │ │header│ len=3│ 7 │ 8 │ 9 │
+└──────┴──────┴───┴───┴───┘ └──────┴──────┴───┴───┴───┘ └──────┴──────┴───┴───┴───┘
+
+  Row arrays are separate heap objects.
+  They are NOT contiguous — 0x200, 0x300, 0x400 can be anywhere on the heap.
+
+
+
+
+```
+## command line arguments
+```java
+
+java MyProgram arg1 arg2 arg3
+
+public static void main(String[] args)
+
+public class PrintAll {
+    public static void main(String[] args) {
+        for (int i = 0; i < args.length; i++) {
+            System.out.println("args[" + i + "] = " + args[i]);
+        }
+    }
+}
+
+
+$ java PrintAll foo bar baz
+args[0] = foo
+args[1] = bar
+args[2] = baz
+
+
+
+```
+
+```java 
+
+public static void main(String[] args) {
+    System.out.println(args[0]);   // prints: Alice
+    System.out.println(args[1]);   // prints: 25
+    String name = args[0];
+    String ageAsString = args[1];
+    int age = Integer.parseInt(ageAsString);
+}
+
+
+
+
+
+╔══════════════════════════════════════════════════════════════════════════════════════════╗
+║                        COMPLETE MEMORY LAYOUT                                           ║
+║                   java CommandLineDemo Alice 25                                         ║
+╚══════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   STACK MEMORY                                          │
+│                          (fixed size, auto managed)                                     │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                         │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │                        main() STACK FRAME                                       │   │
+│   ├───────────────────┬─────────────────────────────────────────────────────────────┤   │
+│   │  Variable         │  Value stored on stack                                      │   │
+│   ├───────────────────┼─────────────────────────────────────────────────────────────┤   │
+│   │  args             │  0x200  ──────────────────────────────────────────────────────────► (points to heap)
+│   ├───────────────────┼─────────────────────────────────────────────────────────────┤   │
+│   │  name             │  0x100  ──────────────────────────────────────────────────────────► (points to heap)
+│   ├───────────────────┼─────────────────────────────────────────────────────────────┤   │
+│   │  ageAsString      │  0x104  ──────────────────────────────────────────────────────────► (points to heap)
+│   ├───────────────────┼─────────────────────────────────────────────────────────────┤   │
+│   │  age              │  25     (primitive int, lives HERE, no heap involved)       │   │
+│   └─────────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+        │                  │                  │
+        │ args=0x200       │ name=0x100       │ ageAsString=0x104
+        │                  │                  │
+        ▼                  │                  │
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    HEAP MEMORY                                          │
+│                         (dynamic size, garbage collected)                               │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                         │
+│   ADDRESS 0x200                                                                         │
+│   ┌─────────────────────────────────────────────────────────┐                           │
+│   │               String[] ARRAY OBJECT                     │                           │
+│   ├──────────────────────┬──────────────────────────────────┤                           │
+│   │  object header       │  (class pointer, GC metadata)    │                           │
+│   ├──────────────────────┼──────────────────────────────────┤                           │
+│   │  length              │  2                               │                           │
+│   ├──────────────────────┼──────────────────────────────────┤                           │
+│   │  index [0]           │  0x100  ──────────────────────────────────────────────────────► String "Alice"
+│   ├──────────────────────┼──────────────────────────────────┤                           │
+│   │  index [1]           │  0x104  ──────────────────────────────────────────────────────► String "25"
+│   └─────────────────────────────────────────────────────────┘                           │
+│                                                                                         │
+│                                                                                         │
+│   ADDRESS 0x100                           ADDRESS 0x104                                 │
+│   ┌────────────────────────────┐          ┌────────────────────────────┐                │
+│   │     String OBJECT "Alice"  │          │     String OBJECT "25"     │                │
+│   ├────────────────┬───────────┤          ├────────────────┬───────────┤                │
+│   │  object header │ metadata  │          │  object header │ metadata  │                │
+│   ├────────────────┼───────────┤          ├────────────────┼───────────┤                │
+│   │  value (ref)   │  0x300 ────────►     │  value (ref)   │  0x400 ────────►           │
+│   ├────────────────┼───────────┤    │     ├────────────────┼───────────┤    │           │
+│   │  hash          │  0        │    │     │  hash          │  0        │    │           │
+│   ├────────────────┼───────────┤    │     ├────────────────┼───────────┤    │           │
+│   │  length        │  5        │    │     │  length        │  2        │    │           │
+│   └────────────────────────────┘    │     └────────────────────────────┘    │           │
+│                                     │                                       │           │
+│   ADDRESS 0x300                     │     ADDRESS 0x400                     │           │
+│   ┌────────────────────────────┐    │     ┌────────────────────────────┐    │           │
+│   │   char[] ARRAY  ◄──────────┘    │     │   char[] ARRAY  ◄──────────┘    │           │
+│   ├───────┬───────┬───────┬─────┬───┤     ├───────┬───────┬────────────────-┤           │
+│   │  [0]  │  [1]  │  [2]  │ [3] │[4]│     │  [0]  │  [1]  │                             │
+│   ├───────┼───────┼───────┼─────┼───┤     ├───────┼───────┤                             │
+│   │  'A'  │  'l'  │  'i'  │ 'c' │'e'│     │  '2'  │  '5'  │                             │
+│   └───────┴───────┴───────┴─────┴───┘     └───────┴───────┘                             │
+│                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+╔══════════════════════════════════════════════════════════════════════════════════════════╗
+║                        HOW EACH LINE OF CODE USES MEMORY                                ║
+╠══════════════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                         ║
+║  String[] args                                                                          ║
+║  ─────────────────────────────────────────────────────────────────────────────────────  ║
+║  stack: args = 0x200                                                                    ║
+║  args is just an address. The actual array lives on heap at 0x200.                      ║
+║                                                                                         ║
+║  args.length                                                                            ║
+║  ─────────────────────────────────────────────────────────────────────────────────────  ║
+║  stack → follow 0x200 → reach heap array → read length field → returns 2               ║
+║                                                                                         ║
+║  args[0]                                                                                ║
+║  ─────────────────────────────────────────────────────────────────────────────────────  ║
+║  stack → follow 0x200 → reach heap array → read index[0] = 0x100                       ║
+║       → follow 0x100 → reach String object "Alice"                                     ║
+║                                                                                         ║
+║  args[1]                                                                                ║
+║  ─────────────────────────────────────────────────────────────────────────────────────  ║
+║  stack → follow 0x200 → reach heap array → read index[1] = 0x104                       ║
+║       → follow 0x104 → reach String object "25"                                        ║
+║                                                                                         ║
+║  String name = args[0]                                                                  ║
+║  ─────────────────────────────────────────────────────────────────────────────────────  ║
+║  stack: name = 0x100   (copies the reference, NOT the object)                           ║
+║  now both args[0] and name point to the SAME "Alice" object on heap                     ║
+║                                                                                         ║
+║  int age = Integer.parseInt(args[1])                                                    ║
+║  ─────────────────────────────────────────────────────────────────────────────────────  ║
+║  stack → follow 0x104 → read char[] → '2','5' → converts to int 25                     ║
+║  stack: age = 25   (primitive, stored directly on stack, no heap address)               ║
+║                                                                                         ║
+╚══════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+╔══════════════════════════════════════════════════════════════════════════════════════════╗
+║                              REFERENCE CHAIN SUMMARY                                    ║
+╠══════════════════════════════════════════════════════════════════════════════════════════╣
+║                                                                                         ║
+║  args ──► 0x200 (String[])                                                              ║
+║               └── [0] ──► 0x100 (String "Alice")                                       ║
+║                               └── value ──► 0x300 (char[] {'A','l','i','c','e'})        ║
+║               └── [1] ──► 0x104 (String "25")                                          ║
+║                               └── value ──► 0x400 (char[] {'2','5'})                   ║
+║                                                                                         ║
+║  name       ──► 0x100  (same object as args[0], no copy made)                           ║
+║  ageAsString──► 0x104  (same object as args[1], no copy made)                           ║
+║  age            25     (primitive, lives on stack, no reference at all)                 ║
+║                                                                                         ║
+╚══════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+╔══════════════════════════════════════════════════════════════════════════════════════════╗
+║                                  KEY RULES                                              ║
+╠══════════════════════╦══════════════════════════════════════════════════════════════════╣
+║  String              ║  object → always on heap                                        ║
+║  int, char, boolean  ║  primitive → always on stack                                    ║
+║  args variable       ║  stack reference → holds address of heap array                  ║
+║  args[i]             ║  heap reference → holds address of heap String                  ║
+║  args[0] == name     ║  both point to same heap object, no duplication                 ║
+║  String → char[]     ║  every String internally wraps a char array on heap             ║
+╚══════════════════════╩══════════════════════════════════════════════════════════════════╝
+
+
+
+public class Hello {
+    public static void main(String[] args) {
+        if (args.length < 2) {
+            System.out.println("Usage: java Hello <name> <age>");
+            return;
+        }
+
+        String name = args[0];
+        int age = Integer.parseInt(args[1]);
+
+        System.out.println("Hello, " + name + "!");
+        System.out.println("You are " + age + " years old.");
+    }
+}
+
+Run: java Hello Alice 25
+
+Output:
+        Hello, Alice!
+        You are 25 years old.
+
+
+
+You type:   java Hello Alice 25
+
+OS splits:  [ "Hello", "Alice", "25" ]
+                 ^         ^       ^
+              class     arg[0]  arg[1]
+              name
+              (not passed to args)
+
+JVM internally does something like this:
+```
+
+```java
+
+String s0 = new String("Alice");   // heap address: 0x100
+String s1 = new String("25");      // heap address: 0x104
+
+String[] args = new String[2];   // heap address: 0x200
+args[0] = s0;                    // stores reference 0x100
+args[1] = s1;                    // stores reference 0x104
+
+HEAP MEMORY:
+-------------------------------------------
+Address  | Content
+-------------------------------------------
+0x100    | String object → "Alice"
+0x104    | String object → "25"
+0x200    | String[] object → { 0x100, 0x104 }
+-------------------------------------------
+
+public static void main(String[] args)
+                                ^
+                         args holds 0x200
+                         (just a reference, not the actual array)
+
+STACK FRAME (main):
+--------------------------
+| args = 0x200           |   <-- reference to heap array
+--------------------------
+
+HEAP:
+--------------------------
+| 0x200 : String[2]      |
+|   [0] = 0x100          |----> "Alice"
+|   [1] = 0x104          |----> "25"
+--------------------------
+
+
+========================================================================
+
+
+                  STACK                              HEAP
+                  ─────                              ────
+        ┌────────────────────┐             ┌─────────────────────────────────┐
+        │ main() frame       │             │  0x200 → String[2]              │
+        │                    │             │    index[0] = 0x100             │
+        │  args = 0x200 ─────┼────────────►│    index[1] = 0x104             │
+        │                    │             │    length   = 2                 │
+        │  name = 0x100 ─────┼──────┐      └────────────┬────────────────────┘
+        │                    │      │                   │
+        │  ageAsString=0x104 ┼───┐  │      ┌────────────▼────────────────────┐
+        │                    │   │  └─────►│  0x100 → String "Alice"         │
+        │  age = 25          │   │         │   char[] = {'A','l','i','c','e'}│
+        │  (primitive, here) │   │         │   length = 5                    │
+        └────────────────────┘   │         └─────────────────────────────────┘
+                                 │
+                                 │         ┌─────────────────────────────────┐
+                                 └────────►│  0x104 → String "25"            │
+                                           │    char[] = {'2','5'}           │
+                                           │    length = 2                   │
+                                           └─────────────────────────────────┘
+
+Each String object internally contains:
+            - object header  (class pointer, GC metadata)
+            - char[] value   (the actual characters)
+            - int hash       (cached hash code, default 0)
+            - int length     (number of characters)
+
+
+
+public class Calculator {
+    public static void main(String[] args) {
+        if (args.length < 2) {
+            System.out.println("Usage: java Calculator <num1> <num2>");
+            return;
+        }
+
+        try {
+            int a = Integer.parseInt(args[0]);
+            int b = Integer.parseInt(args[1]);
+            System.out.println("Sum     = " + (a + b));
+            System.out.println("Product = " + (a * b));
+        } catch (NumberFormatException e) {
+            System.out.println("Error: arguments must be integers.");
+        }
+    }
+}
+
+
+
+class ConvertDemo {
+    public static void main(String[] args) {
+        int a = Integer.parseInt(args[0]);
+        double b = Double.parseDouble(args[1]);
+        boolean c = Boolean.parseBoolean(args[2]);
+
+        System.out.println("Int: " + a);
+        System.out.println("Double: " + b);
+        System.out.println("Boolean: " + c);
+    }
+}
+
+RUN :
+    java ConvertDemo 10 3.14 true
+
+
+
+public class Demo {
+    public static void main(String[] args) {
+        int num = 10;
+        System.out.println(num);
+    }
+}
+
+
+// This is a single-line comment
+int a = 10;
+
+/* This is a
+   multi-line comment */
+int b = 20;
+
+/**
+ * Adds two numbers
+ * @param x first number
+ * @param y second number
+ * @return sum
+ */
+int add(int x, int y) {
+    return x + y;
+}
+
+int[] arr = new int[5];
+
+System.out.println(arr.getClass()); // class [I
+
+String[] names = new String[3];
+System.out.println(names.getClass()); //class [Ljava.lang.String;
+
+int[]     a = {1};
+double[]  b = {1.0};
+String[]  c = {"hi"};
+
+System.out.println(a.getClass().getName());   // [I
+System.out.println(b.getClass().getName());   // [D
+System.out.println(c.getClass().getName());   // [Ljava.lang.String;
+
+int[][] a = new int[3][5];
+
+
+```
+
+## Jagged Array
+```java
+
+int[][] jagged = new int[3][];   // 3 rows, but column size not decided yet
+jagged[0] = new int[2];          // row 0 has 2 columns
+jagged[1] = new int[4];          // row 1 has 4 columns
+jagged[2] = new int[1];          // row 2 has 1 column
+
+jagged[0][0] = 10;
+jagged[0][1] = 20;
+
+jagged[1][0] = 1;
+jagged[1][1] = 2;
+jagged[1][2] = 3;
+jagged[1][3] = 4;
+
+jagged[2][0] = 99;
+
+int[][] jagged = {
+    {10, 20},
+    {1, 2, 3, 4},
+    {99}
+};
+
+System.out.println(jagged.length);      // 3  → number of rows
+
+System.out.println(jagged[0].length);   // 2  → columns in row 0
+System.out.println(jagged[1].length);   // 4  → columns in row 1
+System.out.println(jagged[2].length);   // 1  → columns in row 2
+
+
+int[][] jagged = {
+    {10, 20},
+    {1, 2, 3, 4},
+    {99}
+};
+
+for (int i = 0; i < jagged.length; i++) {
+    for (int j = 0; j < jagged[i].length; j++) {   // ← jagged[i].length, not fixed
+        System.out.print(jagged[i][j] + " ");
+    }
+    System.out.println();
+}
+
+
 ```
