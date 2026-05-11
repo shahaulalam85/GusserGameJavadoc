@@ -3323,3 +3323,620 @@ for (int i = 0; i < jagged.length; i++) {
 
 
 ```
+
+```java
+
+class BankAccount {
+    private double balance; // hidden
+
+    public double getBalance() {       // controlled read
+        return balance;
+    }
+
+    public void deposit(double amount) { // controlled write
+        if (amount > 0) balance += amount;
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) balance -= amount;
+        else System.out.println("Invalid withdrawal!");
+    }
+}
+
+// BUGGY — shadowing problem
+public void setDog(String breed, float age, int price) {
+// local variable assigned to itself! instance variable never updated
+    breed = breed;  
+    age = age;
+    price = price;
+}
+
+// CORRECT — this keyword resolves the shadowing
+public void setDog(String breed, float age, int price) {
+// this.breed = instance variable; breed = local parameter
+    this.breed = breed;   
+    this.age = age;
+    this.price = price;
+}
+
+class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        // Without 'this', name = name does nothing useful
+        // Java thinks both refer to the parameter
+        this.name = name;  // this.name → instance variable
+        this.age  = age;   // age (right side) → parameter
+    }
+}
+
+## Without this
+public Person(String name, int age) {
+    name = name; // ❌ assigns parameter to itself — instance variable unchanged
+    age  = age;  // ❌ same problem — instance variable stays 0/null
+}
+
+
+
+class Rectangle {
+    private double width;
+    private double height;
+    private String color;
+
+    // Primary constructor — all fields
+    public Rectangle(double width, double height, String color) {
+        this.width  = width;
+        this.height = height;
+        this.color  = color;
+        System.out.println("Full constructor called");
+    }
+
+    // Delegates to primary constructor with default color
+    public Rectangle(double width, double height) {
+        this(width, height, "white"); // calls the 3-arg constructor
+    }
+
+    // Delegates to 2-arg constructor — creates a square
+    public Rectangle(double side) {
+        this(side, side); // calls the 2-arg constructor
+    }
+
+    // No-arg — creates a default unit square
+    public Rectangle() {
+        this(1.0); // calls the 1-arg constructor
+    }
+}
+
+Rectangle r1 = new Rectangle();         // → this(1.0) → this(1,1) → this(1,1,"white")
+Rectangle r2 = new Rectangle(5.0, 3.0); // → this(5,3,"white")
+Rectangle r3 = new Rectangle(4, 6, "red"); // direct
+
+
+public Rectangle(double side) {
+    System.out.println("hello"); // ❌ compile error — this() must be first
+    this(side, side);
+}
+
+
+class Dog {
+    private String breed;
+    private float age;
+    private int price;
+
+    public void setDog(String breed, float age, int price) {
+        this.breed = breed;
+        this.age   = age;
+        this.price = price;
+    }
+
+    public String getBreed() { return breed; }
+    public float  getAge()   { return age;   }
+    public int    getPrice() { return price; }
+
+    public void display() {
+        // passing current Dog object to Printer class
+        Printer p = new Printer();
+        p.print(this);        // 'this' = current Dog object
+    }
+}
+
+class Printer {
+    public void print(Dog d) {
+        System.out.println("Breed : " + d.getBreed());
+        System.out.println("Age   : " + d.getAge());
+        System.out.println("Price : " + d.getPrice());
+    }
+}
+
+class Launch {
+    public static void main(String[] args) {
+        Dog d1 = new Dog();
+        d1.setDog("BullDog", 4.5f, 6500);
+        d1.display();   // passes d1 as 'this' to Printer
+
+        Dog d2 = new Dog();
+        d2.setDog("Pug", 3.0f, 4000);
+        d2.display();   // passes d2 as 'this' to Printer
+    }
+}
+
+## What Is Happening 
+d1.display() is called
+    → inside display(), 'this' refers to d1
+    → p.print(this) means p.print(d1)
+    → Printer receives d1 and prints its data
+
+d2.display() is called
+    → inside display(), 'this' refers to d2
+    → p.print(this) means p.print(d2)
+    → Printer receives d2 and prints its data
+
+
+
+class Parent {
+
+    Parent() {
+        System.out.println("Parent");
+    }
+}
+
+class Child extends Parent {
+
+    Child() {
+        // super();   // calls parent constructor
+        System.out.println("Child");
+    }
+}
+
+class main {
+
+    public static void main(String[] args) {
+        Child d = new Child(); // Parent Child
+
+    }
+}
+
+
+this();   // ✅ first
+super();  // ❌ cannot come after
+
+class Dog {
+    private String breed;
+    private float  age;
+    private int    price;
+
+    // returns Dog instead of void
+    public Dog setBreed(String breed) {
+        this.breed = breed;
+        return this;     // returns current object
+    }
+
+    public Dog setAge(float age) {
+        this.age = age;
+        return this;     // returns current object
+    }
+
+    public Dog setPrice(int price) {
+        this.price = price;
+        return this;     // returns current object
+    }
+
+    public String getBreed() { return breed; }
+    public float  getAge()   { return age;   }
+    public int    getPrice() { return price; }
+}
+
+
+
+
+
+class Launch {
+    public static void main(String[] args) {
+
+        // Create object and chain all setters + print together
+        Dog d = new Dog()
+                    .setBreed("BullDog")
+                    .setAge(4.5f)
+                    .setPrice(6500);
+
+        System.out.println(d.getBreed());
+        System.out.println(d.getAge());
+        System.out.println(d.getPrice());
+    }
+}
+
+class Outer {
+    private String name = "Outer";
+
+    class Inner {
+        private String name = "Inner";
+
+        void display() {
+            System.out.println(this.name);       // "Inner"  — inner class field
+            System.out.println(Outer.this.name); // "Outer"  — outer class field
+        }
+    }
+}
+
+Outer outer = new Outer();
+Outer.Inner inner = outer.new Inner();
+inner.display();
+
+
+class Counter {
+    private int count = 0;
+    private static int total = 0;
+
+    public void increment() {
+        this.count++;  // ✅ valid — instance method has 'this'
+        total++;
+    }
+
+    public static void reset() {
+        // this.count = 0; // ❌ compile error: non-static variable cannot be referenced from static context
+        total = 0;         // ✅ valid — static context can access static fields
+    }
+}
+
+class Demo {
+    static int count = 10;
+
+    static void show() {
+        System.out.println(count);      // ✅ allowed
+        System.out.println(this.count); // ❌ ERROR
+        System.out.println(Demo.count); // ✅ also correct
+    }
+}
+
+
+
+class Dog {
+    private String breed;
+    private float  age;
+    private int    price;
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+    // What JVM actually processes
+    public void setBreed(Dog this, String breed) {
+        this.breed = breed;
+    }
+}
+
+// What you write
+d1.setBreed("BullDog");
+
+// What JVM actually does
+Dog.setBreed(d1, "BullDog");
+//           ↑
+//     d1 becomes 'this' inside the method
+
+
+
+class Demo {
+    int x = 10;
+
+    void show() {
+        System.out.println(this.x);
+    }
+    
+    // What JVM actually processes
+    void show(Demo this) {
+    System.out.println(this.x);
+    }
+}
+
+
+```
+
+```java
+
+public class Dog {
+    String name;
+    int age;
+    // Compiler inserts: public Dog() {}
+}
+
+public class Dog {
+    String name;
+
+    public Dog(String name) {   // you defined this
+        this.name = name;
+    }
+    // public Dog() {} => now jvm will not add this implicitly 
+    // if i want this i have to define explicitly(must)
+}
+
+// Dog d = new Dog(); ← COMPILE ERROR — default constructor is gone
+
+
+public class Config {
+    private int timeout;
+    private boolean debug;
+
+    public Config() {
+        this.timeout = 30;      // meaningful defaults
+        this.debug = false;
+    }
+}
+
+
+public class Point {
+    private final double x;
+    private final double y;
+
+    public Point(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+
+
+class Student {
+    int rollNo;
+    String name;
+
+    // Parameterized Constructor
+    Student(int rollNo, String name) {
+        this.rollNo = rollNo;
+        this.name = name;
+    }
+
+    // Copy Constructor
+    Student(Student obj) {
+        this.rollNo = obj.rollNo;
+        this.name = obj.name;
+    }
+
+    void display() {
+        System.out.println(rollNo + " " + name);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Student s1 = new Student(101, "Alam");
+        Student s2 = new Student(s1);   // copy of s1
+
+        s1.display(); // 101 Alam
+        s2.display(); // 101 Alam
+
+        // Modify s2 — s1 should NOT change
+        s2.rollNo = 999;
+        s1.display(); // 101 Alam  ✅ unchanged
+        s2.display(); // 999 Alam
+    }
+}
+
+class Address {
+    String city;
+    Address(String city) { this.city = city; }
+}
+
+class Student {
+    int rollNo;
+    Address address;
+
+    Student(int rollNo, Address address) {
+        this.rollNo = rollNo;
+        this.address = address;        // same reference copied
+    }
+
+    // Shallow Copy Constructor
+    Student(Student obj) {
+        this.rollNo = obj.rollNo;
+        this.address = obj.address;    // ⚠️ both point to same Address object
+    }
+    // Deep Copy Constructor
+    Student(Student obj) {
+        this.rollNo = obj.rollNo;
+        this.address = new Address(obj.address.city);  // ✅ new object created
+    }
+}
+
+public class Rectangle {
+    private double width;
+    private double height;
+    private String color;
+
+    public Rectangle() {
+        this(1.0, 1.0);          // calls Rectangle(double, double)
+    }
+
+    public Rectangle(double width, double height) {
+        this(width, height, "white");  // calls 3-arg constructor
+    }
+
+    public Rectangle(double width, double height, String color) {
+        // Single place where actual assignment happens
+        this.width  = width;
+        this.height = height;
+        this.color  = color;
+    }
+}
+
+class Animal {
+    Animal() {   // no-arg constructor exists
+        System.out.println("Animal created");
+    }
+}
+
+class Dog extends Animal {
+    Dog() {
+        // compiler inserts super() here automatically
+        System.out.println("Dog created");
+    }
+}
+
+class Animal {
+    String name;
+
+    Animal(String name) {  // only parameterized constructor
+        this.name = name;
+    }
+    // ❌ no no-arg constructor — Java did NOT auto-generate one
+}
+
+class Dog extends Animal {
+    Dog() {
+        // compiler tries to insert super() here
+        // but Animal() doesn't exist → COMPILE ERROR
+    }
+}
+
+Error: There is no default constructor available in 'Animal'
+
+
+class Dog extends Animal {
+    Dog() {
+        super("Unknown"); // ✅ explicitly call the available constructor
+        System.out.println("Dog created");
+    }
+
+    Dog(String name) {
+        super(name);    // ✅ pass the argument up
+        System.out.println("Dog created: " + name);
+    }
+}
+
+
+
+
+
+
+
+
+
+class Animal {
+
+    // Step 1 — Parent static field
+    static String kingdom = initKingdom();
+    static String initKingdom() {
+        System.out.println("1. Parent static field initialized");
+        return "Animalia";
+    }
+
+    // Step 1 — Parent static initializer block
+    static {
+        System.out.println("2. Parent static initializer block");
+    }
+
+    // Step 3 & 4 — Parent instance field
+    String type = initType();
+    String initType() {
+        System.out.println("4. Parent instance field initialized");
+        return "Vertebrate";
+    }
+
+    // Step 4 — Parent instance initializer block
+    {
+        System.out.println("5. Parent instance initializer block");
+    }
+
+    // Step 5 — Parent constructor
+    Animal() {
+        System.out.println("6. Parent constructor body");
+    }
+}
+
+class Dog extends Animal {
+
+    // Step 2 — Child static field
+    static String species = initSpecies();
+    static String initSpecies() {
+        System.out.println("3. Child static field initialized");
+        return "Canis lupus";
+    }
+
+    // Step 2 — Child static initializer block
+    static {
+        System.out.println("  (Child static initializer block — same step)");
+    }
+
+    // Step 6 & 7 — Child instance field
+    String breed = initBreed();
+    String initBreed() {
+        System.out.println("7. Child instance field initialized");
+        return "Labrador";
+    }
+
+    // Step 7 — Child instance initializer block
+    {
+        System.out.println("8. Child instance initializer block");
+    }
+
+    // Step 8 — Child constructor
+    Dog() {
+        super();   // steps 3–6 happen inside here
+        System.out.println("9. Child constructor body");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("--- Creating first Dog ---");
+        Dog d1 = new Dog();
+
+        System.out.println("\n--- Creating second Dog ---");
+        Dog d2 = new Dog();   // static steps do NOT repeat
+    }
+}
+
+
+--- Creating first Dog ---
+1. Parent static field initialized
+2. Parent static initializer block
+3. Child static field initialized
+   (Child static initializer block — same step)
+4. Parent instance field initialized
+5. Parent instance initializer block
+6. Parent constructor body
+7. Child instance field initialized
+8. Child instance initializer block
+9. Child constructor body
+
+--- Creating second Dog ---
+4. Parent instance field initialized
+5. Parent instance initializer block
+6. Parent constructor body
+7. Child instance field initialized
+8. Child instance initializer block
+9. Child constructor body
+
+
+public class Object {
+    // The absolute terminus of every constructor chain
+    public Object() { }   // native JVM implementation underneath
+}
+
+class Animal {
+    Animal() {
+        super(); // → calls Object()
+        System.out.println("Animal");
+    }
+}
+
+class Dog extends Animal {
+    Dog() {
+        super(); // → calls Animal()
+        System.out.println("Dog");
+    }
+}
+
+class Labrador extends Dog {
+    Labrador() {
+        super(); // → calls Dog()
+        System.out.println("Labrador");
+    }
+}
+
+new Labrador();
+
+
+
+
+```
+
