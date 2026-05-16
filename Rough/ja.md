@@ -3935,6 +3935,81 @@ class Labrador extends Dog {
 
 new Labrador();
 
+```
+
+## String
+```java
+
+Before Java 9
+char[] value; (UTF-16 format => 2 bytes per character)
+
+String s = "Hello";
+memory used = 5 characters × 2 bytes = 10 bytes
+Even though ASCII characters need only 1 byte.
+
+
+
+After Java 9 (Compact Strings)
+Java changed internal storage to:
+
+byte[] value;
+byte coder;
+
+If all characters fit in Latin-1 range:
+String s = "Hello";
+memory used = 5 bytes instead of 10 bytes;
+
+If string contains Unicode characters:
+String s = "नमस्ते" (2 bytes per character)
+
+
+String s = "Hello";
+s.concat(" World");   // does NOT change s
+System.out.println(s); // still prints: Hello
+
+s = s.concat(" World"); // now s points to a new object
+System.out.println(s);  // prints: Hello World
+
+
+public class Test {
+    public static void main(String[] args) {
+
+        String s1 = "Java";
+        String s2 = "Java";
+
+        String s3 = new String("Java");
+
+        String s4 = s1 + "";
+
+        final String s5 = "Ja";
+        final String s6 = "va";
+
+        String s7 = s5 + s6;
+
+        System.out.println(s1 == s2); // true
+        System.out.println(s1 == s3); // false
+        System.out.println(s1 == s4); // false
+        System.out.println(s1 == s7); // true
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+
+        String s1 = "Java";
+
+        String s2 = new String("Java");
+
+        String s3 = s2.intern();
+
+        System.out.println(s1 == s2); // false
+
+        System.out.println(s1 == s3); // true
+
+        System.out.println(s2 == s3); // false
+    }
+}
 
 
 

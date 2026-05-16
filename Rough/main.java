@@ -1,23 +1,14 @@
 
-class Parent {
-
-    Parent() {
-        System.out.println("Parent");
-    }
-}
-
-class Child extends Parent {
-
-    Child() {
-        // super();   // calls parent constructor
-        System.out.println("Child");
-    }
-}
-
-class main {
+public class main {
 
     public static void main(String[] args) {
-        Child d = new Child(); // Parent Child
 
+        String s1 = new String("CAT");
+        // String s2 = s1.intern();
+        String s3 = "CAT";
+
+        // System.err.println(s2.hashCode());
+        System.err.println(s3.hashCode());
+        System.err.println(s1.hashCode());
     }
 }
