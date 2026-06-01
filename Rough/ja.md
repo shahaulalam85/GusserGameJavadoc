@@ -4015,3 +4015,1854 @@ public class Main {
 
 ```
 
+## string buffer
+```java
+
+StringBuffer sb = new StringBuffer("Hello");
+sb.append(" World");
+System.out.println(sb); // Hello World
+
+
+// Inside JDK source — StringBuffer
+public synchronized StringBuffer append(String str) { ... }
+public synchronized StringBuffer insert(int offset, String str) { ... }
+public synchronized StringBuffer delete(int start, int end) { ... }
+public synchronized StringBuffer reverse() { ... }
+
+
+Thread 1 calls sb.append("A")  ──→  acquires lock
+Thread 2 calls sb.append("B")  ──→  BLOCKED, waits
+Thread 1 finishes              ──→  releases lock
+Thread 2 proceeds              ──→  acquires lock, appends "B"
+
+
+// StringBuffer internally (inherits from AbstractStringBuilder):
+byte[] value;   // the actual character storage (Java 9+)
+int count;      // number of characters currently stored
+
+
+StringBuffer sb = new StringBuffer();
+sb.capacity();  // 16 (default)
+
+StringBuffer sb2 = new StringBuffer("Hello");
+sb2.capacity(); // 21 (16 + length of "Hello")
+
+
+StringBuffer sb = new StringBuffer(100); // pre-allocate for 100 chars
+
+StringBuffer sb1 = new StringBuffer();           // empty, capacity 16
+StringBuffer sb2 = new StringBuffer("Hello");    // with value = 21
+StringBuffer sb3 = new StringBuffer(50);         // empty, capacity 50
+StringBuffer sb4 = new StringBuffer(sb2);        // copy of another = 21
+
+
+StringBuffer sb = new StringBuffer("Java");
+sb.append(" is");
+sb.append(" fun");
+sb.append(2024);         // int
+sb.append(true);         // boolean
+sb.append('!');          // char
+sb.append(3.14);         // double
+System.out.println(sb);  // Java is fun2024true!3.14
+
+
+
+public synchronized StringBuffer append(String str) {
+    toStringCache = null;
+    super.append(str);// delegates to AbstractStringBuilder
+    return this;
+}
+
+StringBuffer sb = new StringBuffer("Java fun");
+sb.insert(4, " is");
+System.out.println(sb);  // Java is fun
+
+4. delete() — remove a range
+
+Syntax: sb.delete(start, end);
+
+StringBuffer sb = new StringBuffer("Hello Beautiful World");
+sb.delete(6, 16);         // removes index 6 to 15
+System.out.println(sb);   // Hello World
+
+5. deleteCharAt() — remove one character
+
+Syntax: sb.deleteCharAt(index);
+
+StringBuffer sb = new StringBuffer("Helllo");
+sb.deleteCharAt(3);       // removes extra 'l'
+System.out.println(sb);   // Hello
+
+6. replace() — overwrite a range
+
+Syntax: sb.replace(start, end, newString);
+
+StringBuffer sb = new StringBuffer("Hello World");
+sb.replace(6, 11, "Java");
+System.out.println(sb);   // Hello Java
+
+7. reverse() - Swaps characters from both ends.
+
+StringBuffer sb = new StringBuffer("Hello");
+sb.reverse();
+System.out.println(sb);   // olleH
+
+8. charAt() and setCharAt()
+
+Syntax: sb.charAt(index); => char 
+Syntax: sb.setCharAt(index, character); => void
+
+StringBuffer sb = new StringBuffer("Hello");
+char c = sb.charAt(1);    // 'e'  — read
+sb.setCharAt(0, 'J');     // write
+System.out.println(sb);   // Jello
+
+8. indexOf() and lastIndexOf()
+
+Syntax: sb.indexOf("text"); => int(first occur) / -1(not found)
+Syntax: sb.lastIndexOf("text"); => int(last occur) / -1(not found)
+
+StringBuffer sb = new StringBuffer("abcabc");
+sb.indexOf("b");           // 1 — first occurrence
+sb.lastIndexOf("b");       // 4 — last occurrence
+sb.lastIndexOf("d");       // -1 - not found
+
+
+
+9. substring()
+
+Syntax: sb.substring(start); => String
+Syntax: sb.substring(start, end); => String
+
+StringBuffer sb = new StringBuffer("Hello World");
+sb.substring(6);           // "World"
+sb.substring(0, 5);        // "Hello"
+
+10. length() and capacity()
+
+Syntax: sb.length(); => int
+Syntax: sb.capacity(); => int
+
+StringBuffer sb = new StringBuffer("Hello");
+sb.length();     // 5  — actual characters stored
+sb.capacity();   // 21 — total buffer size
+
+
+11. ensureCapacity() 
+
+Syntax: sb.ensureCapacity(size); => void
+
+StringBuffer sb = new StringBuffer();  // capacity 16
+sb.ensureCapacity(50);                 // now at least 50
+// actual new capacity = max(50, 16*2+2) = 50
+
+12. trimToSize()
+
+Syntax: sb.trimToSize(); => void
+
+StringBuffer sb = new StringBuffer(100);
+sb.append("Hi");
+sb.trimToSize();  // shrinks capacity to match length (2)
+
+13. toString()
+
+Syntax: sb.toString(); => String(immutable) new object
+
+StringBuffer sb = new StringBuffer("Hello");
+String s = sb.toString();  // convert to immutable String
+
+
+14. Important 
+
+StringBuffer sb = new StringBuffer("abcabc");
+System.out.println(sb.append("\ne")); 
+Output: 
+/*
+abcabc 
+e (next line)
+*/
+
+
+
+
+```
+
+```java
+
+15. setLength()    
+
+Syntax: sb.setLength(size); => void;
+
+StringBuilder sb = new StringBuilder("Hello");
+sb.setLength(3);
+System.out.println(sb); // Hel
+System.out.println(sb.length()); // 3
+sb.setLength(8);
+System.out.println(sb); // Hel
+System.out.println(sb.length()); // 8
+
+
+
+16. codePointAt()
+
+Syntax: sb.codePointAt(index); => int
+
+StringBuffer sb = new StringBuffer("ABC");
+System.out.println(sb.codePointAt(0)); // 65 
+// (Unicode 65 0f 'A')
+
+
+17. contains()
+
+Snytax: sb.contains("text"); => boolean
+
+StringBuffer sb = new StringBuffer("Java Programming");
+System.out.println(sb.contains("Java")); // true
+
+
+
+18. startsWith() / endsWith()
+
+Syntax: sb.toString().startsWith("text"); => boolean
+Syntax: sb.toString().endsWith("text"); => boolean
+
+StringBuffer sb = new StringBuffer("Java Programming");
+sb.toString().startsWith("Java"); // true
+sb.toString().endsWith("ming"); // true
+
+
+19. regionMatches()
+
+Syntax: sb.toString().regionMatches(toffset, other, ooffset, len);
+                                => boolean
+
+StringBuffer sb = new StringBuffer("JavaProgramming");
+System.out.println(
+    sb.toString().regionMatches(4, "Programming", 0, 11)
+); // true
+
+
+20. join()
+
+Syntax: String.join(delimiter, elements); => String
+
+String s = String.join("-", "Java", "Python", "C++");
+System.out.println(s); // Java-Python-C++
+
+21. split() - is a method of String class
+
+Syntax: str.split(regex); => String[]
+
+String s = "Java-Python-C++";
+String[] arr = s.split("-");
+for(String x : arr) {
+    System.out.println(x);
+}
+Output:
+/*
+Java
+Python
+C++
+*/
+
+
+
+
+```
+
+```java
+
+22. trim() / strip()
+// Both remove spaces from beginning and end of a string.
+
+Syntax: str.trim(); => String
+Syntax: str.strip(); => String
+
+String s = "   Java   ";
+System.out.println(s.trim()); // Java
+System.out.println(s.strip()); // Java
+
+
+23. isEmpty() / isBlank()
+
+Syntax: str.isEmpty(); => boolean
+Syntax: str.isBlank(); => boolean
+
+String s = "   ";
+System.out.println(s.isEmpty()); // false
+System.out.println(s.isBlank()); // true
+
+
+24. toCharArray()
+
+Syntax: str.toCharArray(); => char[]
+
+String s = "JAVA";
+char[] arr = s.toCharArray();
+for(char ch : arr) {
+    System.out.println(ch);
+}
+Output:
+/*
+J
+A
+V
+A
+*/
+
+
+25. repeat() 
+
+Syntax: str.repeat(n); => String
+
+String s = "Hi ";
+System.out.println(s.repeat(3)); // Hi Hi Hi
+
+
+26. StringJoiner
+
+Syntax: StringJoiner(CharSequence delimiter)
+Syntax: StringJoiner(CharSequence delimiter,
+             CharSequence prefix,
+             CharSequence suffix)
+
+import java.util.StringJoiner;
+class Test {
+    public static void main(String[] args) {
+        StringJoiner sj =
+            new StringJoiner(", ", "[", "]");
+        sj.add("A");
+        sj.add("B");
+        sj.add("C");
+        System.out.println(sj); // [A, B, C]
+    }
+}
+
+
+
+```
+## inheritance
+```java
+
+
+  IS-A Relationship                  HAS-A Relationship
+  (Inheritance)                      (Association)
+  -----------------                  ------------------
+  Student  "is a"  Human             Student  "has a"  Book
+  Plane    "is a"  Vehicle           Plane    "has a"  Engine
+  Deer     "is a"  Animal            Deer     "has a"  Heart
+
+  Uses: extends keyword              Uses: object reference inside class
+
+
+
+String classes:
+                    +--------+
+                    | Object |  <-- Parent / Base / Super class
+                    +--------+
+                    /   |    \
+                   /    |     \
+              +------+ +------------+ +-------------+
+              |String| |StringBuffer| |StringBuilder|  <-- Child/Derived/Sub class
+              +------+ +------------+ +-------------+
+
+Wrapper classes:
+                    +--------+
+                    | Object |
+                    +--------+
+                    /         \
+                   /           \
+              +--------+   +---------+  +-----------+
+              | Number |   | Boolean |  | Character |
+              +--------+   +---------+  +-----------+
+              /  | | \ \
+             /   | |  \ \
+          +----+-----+-------+------+-------+--------+
+          |Byte|Short|Integer| Long | Float | Double |
+          +----+-----+-------+------+-------+--------+
+
+
+
+  +-------+
+  | Demo1 |  <-- Parent
+  +-------+
+      ^
+      |
+  +-------+
+  | Demo2 |  <-- Child
+  +-------+
+
+Code:
+  class Demo1                      class Launch
+  {                                {
+    void disp1()                     public static void main(String[] args)
+    {                                {
+      s.o.p("Learn from Leader");      Demo2 d2 = new Demo2();
+    }                                  d2.disp1();  // inherited from Demo1
+  }                                    d2.disp2();  // defined in Demo2
+                                     }
+  class Demo2 extends Demo1         }
+  {
+    void disp2()
+    {
+      s.o.p("Pioneering Education");
+    }
+  }
+
+Output:
+  Learn from Leader
+  Pioneering Education
+
+
+  +--------+
+  | Demo 1 |
+  +--------+
+      ^
+      |
+  +--------+
+  | Demo 2 |
+  +--------+
+      ^
+      |
+  +--------+
+  | Demo 3 |
+  +--------+
+
+Code:
+  class Demo1                       class Demo2 extends Demo1
+  {                                 {
+    void disp1()                        void disp2()
+    {                                   {
+      s.o.p("Learn from leader");       s.o.p("Pioneering Education");
+    }                                   }
+  }                                 }
+
+  class Demo3 extends Demo2         class Launch
+  {                                 {
+    void disp3()                        public static void main(String[] args)
+    {                                   {
+      s.o.p("Work is Worship");             Demo3 d3 = new Demo3();
+    }                                       d3.disp1();
+  }                                         d3.disp2();
+                                            d3.disp3();
+                                        }
+                                    }
+
+Output:
+  Learn from Leader
+  Pioneering Education
+  Work is Worship
+
+
+Diagram:
+              +-------+
+              | Demo1 |
+              +-------+
+             /    |    \
+            /     |     \
+      +-------+ +-------+ +-------+
+      | Demo2 | | Demo3 | | Demo4 |
+      +-------+ +-------+ +-------+
+
+Extended version:
+              +-------+
+              | Demo1 |
+              +-------+
+             /    |    \
+            /     |     \
+      +-------+ +-------+ +-------+
+      | Demo2 | | Demo3 | | Demo4 |
+      +-------+ +-------+ +-------+
+       /   \      /   \      /   \
+   +--+ +--+  +--+ +--+  +--+ +--+
+   |D5| |D6|  |D7| |D8|  |D9| |D10|
+   
+
+
+Code:
+  class Demo1 {}
+  class Demo2 extends Demo1 {}
+  class Demo3 extends Demo1 {}
+  class Demo4 extends Demo1 {}
+  class Demo5 extends Demo2 {}
+  class Demo6 extends Demo2 {}
+  class Demo7 extends Demo3 {}
+  class Demo8 extends Demo3 {}
+  class Demo9 extends Demo4 {}
+  class Demo10 extends Demo4 {}
+
+
+Diagram:
+          +--------+
+          | Object |
+          +--------+
+          /         \
+         /           \
+    +-------+     +-------+
+    | Demo1 |     | Demo2 |
+    | i = 9 |     | i = 99|
+    +-------+     +-------+
+          \         /
+           \       /
+          +--------+
+          | Demo3  |   <-- Which 'i' to use? Ambiguity!
+          +--------+
+
+
+Code (INVALID -- will not compile):
+  class Demo1 extends Object { int i = 9;  }
+  class Demo2 extends Object { int i = 99; }
+
+  class Demo3 extends Demo1, Demo2    // <-- COMPILATION ERROR
+  {
+    void disp()
+    {
+      s.o.p(i);   // Which 'i'? Demo1's 9 or Demo2's 99? Ambiguous!
+    }
+  }
+
+Solution: Use Interfaces to achieve similar functionality without ambiguity.
+
+
+
+
+
+Diagram:
+      +-------+
+      | Demo1 |          Valid parts:  Demo2 extends Demo1  (Single)     [OK]
+      +-------+                        Demo3 extends Demo1  (Hierarchical)[OK]
+       /     \
+      /       \           Invalid part: Demo4 extends Demo2, Demo3
+  +-------+ +-------+                  (Multiple Inheritance)            [X]
+  | Demo2 | | Demo3 |
+  +-------+ +-------+
+       \       /
+        \     /
+       +-------+
+       | Demo4 |    <-- This line causes COMPILATION ERROR
+       +-------+
+
+Code:
+  class Demo1 {}                          // OK
+  class Demo2 extends Demo1 {}            // OK
+  class Demo3 extends Demo1 {}            // OK
+  class Demo4 extends Demo2, Demo3 {}     // COMPILATION ERROR
+
+
+
+
+Diagram:
+  class Demo1            class Demo2 extends Demo1
+  {                      {
+    int x;                 int a;
+    int y;                 int b;
+  }                      }
+
+  Demo2 d2 = new Demo2(); 
+
+  Stack          Heap
+  +----+         +---------------------+
+  | d2 |--1000-->| Demo2 object @ 1000 |
+  +----+         +---------------------+
+                 | x  |  0  | <-- Inherited from Demo1
+                 | y  |  0  | <-- Inherited from Demo1
+                 | a  |  0  | <-- Declared in Demo2
+                 | b  |  0  | <-- Declared in Demo2
+                 +---------------------+
+
+Key Point: There is NO separate Demo1 object.
+           Parent members live INSIDE the child object's memory block.
+
+
+
+Example:
+  class AccountHolder
+  {
+    private:
+      int acc_no = 52914;
+      int pwd    = 62521;
+
+    public:
+      void setAccDetails(int acc_no, int pwd)
+      {
+        this->acc_no = acc_no;
+        this->pwd    = pwd;
+      }
+      void display()
+      {
+        s.o.p(acc_no);
+        s.o.p(pwd);
+      }
+  }
+
+  class Hacker extends AccountHolder   // "is-a" AccountHolder
+  {
+    // No new members
+  }
+
+
+
+   INVALID:                             VALID:
+   --------                             ------
+  Hacker h = new Hacker();            Hacker h = new Hacker();
+  h.acc_no;  // ERROR                 h.setAccDetails(52914, 62521);
+  h.pwd;     // ERROR                 h.display();  // Output: 52914
+                                                     //         62521
+
+  Memory layout of Hacker object:
+  +---------------------------+
+  | AccountHolder part        |
+  | (inherited)               |
+  |  acc_no | 52914           |
+  |  pwd    | 62521           |
+  +---------------------------+
+  | Hacker part               |
+  | (no new members)          |
+  +---------------------------+
+
+
+
+
+Case 1 -- Static variables are inherited:
+  class Parent {                 class Child extends Parent {}
+    static int x = 10;
+  }                              public class Launch {
+                                   public static void main(String[] args) {
+                                     System.out.println(Child.x);
+                                   }                // Output: 10
+                                 }
+
+Case 2 -- Static methods are inherited:
+  class Parent {                 class Child extends Parent {}
+    static void disp() {
+      System.out.println(       public class Launch {
+        "Parent method");          public static void main(String[] args) {
+    }                                Child.disp();
+  }                                }              // Output: Parent method
+                                 }
+
+Key Distinction:
+  Instance methods --> can be OVERRIDDEN (runtime polymorphism)
+  Static methods   --> can only be HIDDEN (method hiding, not overriding)
+                       because they belong to the CLASS, not the object.
+
+
+
+================================================================================
+SUMMARY TABLE -- ALL 10 RULES
+================================================================================
+
+  +------+------------------------+-------------------------------------------+
+  | Rule | Type                   | Permitted in Java?                        |
+  +------+------------------------+-------------------------------------------+
+  |  1   | Single                 | YES                                       |
+  |  2   | Multilevel             | YES                                       |
+  |  3   | Hierarchical           | YES                                       |
+  |  4   | Multiple               | NO  (Diamond Problem / Ambiguity)         |
+  |  5   | Hybrid                 | CONDITIONALLY (not if multiple involved)  |
+  |  6   | Cyclic                 | NO  (Infinite loop)                       |
+  |  7   | Memory Allocation      | Child object contains parent data too     |
+  |  8   | Private Members        | Inherited but NOT directly accessible     |
+  |  9   | Constructors           | NOT inherited, but executed via super()   |
+  | 10   | Static Members         | Inherited, belong to CLASS not object     |
+  +------+------------------------+-------------------------------------------+
+
+
+
+
+class Parent {
+
+    static void show() {
+        System.out.println("Parent");
+    }
+}
+
+class Child extends Parent {
+
+    static void show() {
+        System.out.println("Child");
+    }
+}
+
+
+class Parent {
+
+    static int x = 10;
+
+    static void display() {
+        System.out.println("Parent static");
+    }
+
+    void show() {
+        System.out.println("Parent instance");
+    }
+}
+
+class Child extends Parent {
+
+    static int x = 20;
+
+    static void display() {
+        System.out.println("Child static");
+    }
+
+    @Override
+    void show() {
+        System.out.println("Child instance");
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Parent p = new Child();
+
+        System.out.println(p.x);
+
+        p.display();
+
+        p.show();
+    }
+}
+
+
+
+class Animal {
+    String name = "Animal";
+}
+class Dog extends Animal {
+    String name = "Dog";
+    void show() {
+        System.out.println(super.name);  // "Animal"
+        System.out.println(this.name);   // "Dog"
+    }
+}
+
+class Animal {
+    void sound() { System.out.println("Generic sound"); }
+}
+class Dog extends Animal {
+    void sound() {
+        super.sound();  // calls Animal's sound()
+        System.out.println("Bark");
+    }
+}
+
+class Animal {
+    Animal(String name) {
+        System.out.println("Animal: " + name);
+    }
+}
+class Dog extends Animal {
+    Dog(String name) {
+        super(name);    // <-- MUST be first statement
+        System.out.println("Dog: " + name);
+    }
+}
+
+When a child object is created, constructors run TOP-DOWN.
+
+class A { A() { print("A"); } }
+class B extends A { B() { print("B"); } }
+class C extends B { C() { print("C"); } }
+
+new C()  -->  Output:
+            A constructor      <-- parent first
+            B constructor
+            C constructor      <-- child last
+
+Flow diagram:
+-------------
+
+    new C()
+        |
+        v
+    C() calls super()  -->  B() calls super()  -->  A() runs first
+                                                        |
+                                                    B() body runs
+                                                        |
+                                                    C() body runs
+
+
+
+class Animal {
+    void sound() { System.out.println("Some sound"); }
+}
+class Dog extends Animal {
+    @Override
+    void sound() { System.out.println("Bark"); }
+}
+
+
+
+    Rules for Overriding:
+    ─────────────────────
+  +──────────────────────────┬────────────────────────────────────────────+
+  |  Rule                    |  Detail                                    |
+  +──────────────────────────┼────────────────────────────────────────────+
+  |  Same method signature   |  Name + parameters must match exactly      |
+  |  Access modifier         |  Same or WIDER  (protected -> public OK)   |
+  |                          |  Cannot NARROW  (public -> protected BAD)  |
+  |  Return type             |  Same OR covariant (subtype allowed)       |
+  |  static methods          |  Cannot override -- they are HIDDEN        |
+  |  final methods           |  Cannot override -- locked                 |
+  |  private methods         |  Cannot override                           |
+  +──────────────────────────┴────────────────────────────────────────────+
+
+Covariant Return Type:
+──────────────────────
+class Animal {
+    Animal getInstance() { return new Animal(); }
+}
+class Dog extends Animal {
+    @Override
+    Dog getInstance() { return new Dog(); } 
+    // Dog is subtype -> OK
+}
+
+
+   @Override ANNOTATION                                                    
+
+  Tells compiler: "this intentionally overrides a parent method."
+  If no matching method in parent --> COMPILE ERROR (safety net).
+
+      @Override
+      void sond() { } // typo --> compile error caught immediately
+      // correction method is void sound()
+
+  Without @Override, a typo creates a NEW method silently
+
+  ┌──────────────────────────────────────────────┐
+  │   Upcasting -- implicit, always SAFE         │
+  └──────────────────────────────────────────────┘
+      Animal a = new Dog();   // Dog stored in Animal reference
+                              // happens automatically
+
+      [Dog object] <── referenced by ── Animal a
+        ↑
+        actual type
+
+  ┌──────────────────────────────────────────────┐
+  │  Downcasting -- explicit, can FAIL           │
+  └──────────────────────────────────────────────┘
+
+      Animal a = new Dog();
+      Dog d = (Dog) a;   //  safe -- actual object IS Dog
+      d.bark();         //  works
+
+      Animal a2 = new Cat();
+      Dog d2 = (Dog) a2;  //  RUNTIME ClassCastException!
+
+  ┌──────────────────────────────────────────────┐
+  │  instanceof -- check before downcasting      │
+  └──────────────────────────────────────────────┘
+
+      if (a instanceof Dog) {
+          Dog d = (Dog) a;
+          d.bark();
+      }
+
+  ┌──────────────────────────────────────────────┐
+  │  Pattern Matching instanceof  (Java 16+)     │
+  └──────────────────────────────────────────────┘
+      if (a instanceof Dog d) { // declares AND casts in one step
+          d.bark();
+      }
+
+  Memory view of upcasting:
+  ─────────────────────────
+      Stack               Heap
+      ─────               ────
+      a  ─────────> [ Dog Object          ]
+                    [ name   = "Rex"      ]
+                    [ breed  = "Labrador" ]   <-- all Dog fields exist
+                                                  in memory, but Animal
+                                                  reference can't see them
+
+
+```
+```java
+
+class Animal {
+
+    void eat() {
+        System.out.println("Eat");
+    }
+}
+
+class Dog extends Animal {
+
+    void bark() {
+        System.out.println("Bark");
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Animal a = new Dog();
+
+        a.eat();
+
+        a.bark(); // ERROR
+    }
+}
+```
+
+---
+
+## Example Covering All Cases
+
+```java id="jlwm2b"
+
+class Animal {
+
+    void eat() {
+        System.out.println("Eat");
+    }
+    void sound() {
+        System.out.println("Animal Sound");
+    }
+}
+
+class Dog extends Animal {
+
+    @Override
+    void sound() {
+        System.out.println("Dog Bark");
+    }
+    void bark() {
+        System.out.println("Bark");
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Animal a = new Dog();
+
+        a.eat();    // Parent method
+        a.sound();  // Overridden method
+        a.bark();   // ERROR
+    }
+}
+
+
+
+  +───────────────┬──────────────────────────────┬───────────────────────+
+  |               |  Overloading                 |  Overriding           |
+  +───────────────┼──────────────────────────────┼───────────────────────+
+  |  Where        |  Same class                  |  Parent + Child       |
+  |  Signature    |  Different parameters        |  Identical            |
+  |  Resolved at  |  Compile time                |  Runtime              |
+  |  Also called  |  Static polymorphism         |  Dynamic polymorphism |
+  +───────────────┴──────────────────────────────┴───────────────────────+
+
+  +─────────────┬────────────┬──────────────┬──────────┬────────────+
+  |  Modifier   | Same Class | Same Package | Subclass | Everywhere |
+  +─────────────┼────────────┼──────────────┼──────────┼────────────+
+  |  private    |    YES     |     NO       |   NO     |    NO      |
+  |  default    |    YES     |     YES      |   NO*    |    NO      |
+  |  protected  |    YES     |     YES      |   YES    |    NO      |
+  |  public     |    YES     |     YES      |   YES    |    YES     |
+  +─────────────┴────────────┴──────────────┴──────────┴────────────+
+
+  * default is accessible in subclass ONLY IF in the same package.
+
+  [!] private members are NOT inherited.
+      They exist in memory but child CANNOT access them directly.
+      Use getter/setter methods to access private parent fields.
+```
+```java
+
+  +─────────────────┬──────────────────────────────────────────────+
+  |  Usage          |  Effect                                      |
+  +─────────────────┼──────────────────────────────────────────────+
+  |  final class    |  Cannot be extended  (e.g. String class)     |
+  |  final method   |  Cannot be overridden in child class         |
+  |  final variable |  Constant -- cannot be reassigned            |
+  +─────────────────┴──────────────────────────────────────────────+
+
+  final class MathUtils { }     // no class can extend this
+      // class MyMath extends MathUtils { }  → ❌ ERROR
+
+  class Parent {
+      final void show() { System.out.println("Parent"); }
+  }
+  class Child extends Parent {
+      // void show() { }  → ❌ Cannot override final method
+  }
+
+
+Real-life analogy (Parent --> Child):
+  +------------------+        +---------------------------+
+  |     Parent       |        |          Child            |
+  +------------------+        +---------------------------+
+  | height           |------> | height       } Inherited  |
+  | skin-color       |------> | skin-color   }            |
+  |                  |        |                           |
+  | nose             |------> | nose         }            |
+  | eyes             |------> | eyes         } Overridden |
+  | hair             |------> | hair         }            |
+  | teeth            |------> | teeth        }            |
+  |                  |        |                           |
+  |                  |        | code         }            |
+  |                  |        | rain         } Specialized|
+  |                  |        | dance        }            |
+  |                  |        | paint        }            |
+  |                  |        | kickboxing   }            |
+  +------------------+        +---------------------------+
+
+
+  +---------------------+--------------------------------------------------+
+  | Method Type         | Description                                      |
+  +---------------------+--------------------------------------------------+
+  | Inherited           | Copied from parent, used WITHOUT modification.   |
+  |                     | Advantage: Code Reusability                      |
+  +---------------------+--------------------------------------------------+
+  | Overridden          | Copied from parent, but MODIFIED in child class. |
+  |                     | Advantage: Behavior changes per child class      |
+  +---------------------+--------------------------------------------------+
+  | Specialized         | Brand new method, exists ONLY in child class.    |
+  |                     | Advantage: Enhances child class functionality    |
+  +---------------------+--------------------------------------------------+
+
+
+  Components of a class:
+  +-------------------------------+
+  |           class               |
+  |                               |
+  | static variables  }           |
+  | static blocks     } --> Associated with the TYPE (class)
+  | static methods    }           |
+  |                               |
+  | non-static variables }        |
+  | non-static blocks    } --> Associated with the OBJECT (instance)
+  | non-static methods   }        |
+  |                               |
+  | constructors                  |
+  +-------------------------------+
+
+--------------------------------------------------------------------------------
+1) CLASS LOADER SUBSYSTEM
+--------------------------------------------------------------------------------
+Performs 3 activities:
+
+  a) LOADING -- Loads class files into the metaspace
+     i)   Bootstrap class loader  --> Loads standard JDK classes
+     ii)  Extension class loader  --> Loads classes that are extension
+                                      of standard core Java classes
+     iii) Application/System class loader --> Loads application-specific classes
+
+     * Class loaders work on the DELEGATION HIERARCHY MODEL:
+       - Request to load a class is FIRST delegated to its parent class loader
+       - It only loads the class if the parent does not find and load it
+
+  b) LINKING -- Performs verification, preparation, and (optionally) resolution
+     i)   Verify  --> Bytecode verifier verifies if generated bytecode is proper
+                      If class fails verification, a verify error is thrown
+     ii)  Prepare --> Memory allocated for static variables, default values assigned
+     iii) Resolve --> All symbolic memory references replaced with actual references
+                      from method area
+
+  c) INITIALIZATION -- Static variables assigned their original values,
+                       static blocks are executed
+
+
+--------------------------------------------------------------------------------
+2) RUNTIME DATA AREA (5 areas)
+--------------------------------------------------------------------------------
+
+  1) Method Area    -- class metadata, code for methods/constructors
+  2) Heap Area      -- objects, instance variables, static members
+  3) Stack Area     -- stack frames for methods, local variables
+  4) PC Register    -- address of current instruction being executed
+  5) Native Method Stack -- native method information
+
+--------------------------------------------------------------------------------
+3) EXECUTION ENGINE (3 components)
+--------------------------------------------------------------------------------
+
+The JVM invokes the main() method of the class and executes it using the
+execution engine. The execution engine executes the bytecodes loaded into
+the memory area using an interpreter and JIT compiler.
+
+  1) Java Interpreter -- Interprets non-hotspot bytecodes to machine code
+  2) JIT Compiler     -- Compiles hotspot bytecodes to machine code (faster)
+  3) Garbage Collector -- Collects and removes unreferenced objects
+
+
+
+class Demo
+  {
+    static int a = 10, b = 20, c = 30;
+    static
+    {
+      s.o.p("Inside static block");
+      a = 100; b = 200; c = 300;
+    }
+    public static void disp1()
+    {
+      s.o.p("Inside static method");
+      s.o.p(a); s.o.p(b); s.o.p(c);
+    }
+    int x = 40, y = 50, z = 60;
+    {
+      s.o.p("Inside non-static block");
+      x = 45; y = 55; z = 65;
+    }
+    public void disp2()
+    {
+      s.o.p("Inside non-static method");
+      s.o.p(a); s.o.p(b); s.o.p(c);
+      s.o.p(x); s.o.p(y); s.o.p(z);
+    }
+     public Demo()
+    {
+      s.o.p("Inside constructor");
+      x = 400; y = 500; z = 600;
+    }
+    public static void main(String[] args)
+    {
+      s.o.p("Inside main() method");
+      disp1();
+    }
+  }
+
+```
+
+```java 
+
+
+
+class Demo {
+    static int a = 10, b = 20, c = 30;
+    static {
+        System.out.println("Inside static block");
+        a = 100;
+        b = 200;
+        c = 300;
+    }
+    public static void disp1() {
+        System.out.println("Inside static method");
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+    }
+    int x = 40, y = 50, z = 60;
+    {
+        System.out.println("Inside non-static block");
+        x = 45;
+        y = 55;
+        z = 65;
+    }
+    public void disp2() {
+        System.out.println("Inside non-static block");
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+        System.out.println(x);
+        System.out.println(y);
+        System.out.println(z);
+        System.out.println("");
+    }
+
+    public Demo() {
+        System.out.println("Inside constructor");
+        x = 400;
+        y = 500;
+        z = 600;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Inside main() method");
+        Demo
+    }
+}
+
+  /*
+  Output: 
+  Inside static block
+  Inside main() method
+  Inside static method
+  100
+  200
+  300
+  */
+
+
+
+class Demo {
+    int x = 10;
+    {
+        System.out.println("Non-static block");
+    }
+    Demo() {
+        System.out.println("Constructor");
+    }
+    void show() {
+        System.out.println("Method");
+    }
+
+    public static void main(String[] args) {
+        Demo d = new Demo();
+        d.show();
+    }
+}
+
+Steps:
+1	Object creation starts
+2	x gets default value 0
+3	x gets explicit value 10
+4	Non-static block executes
+5	Constructor executes
+6	Object ready
+7	show() method executes
+
+
+
+  Before Compilation:            After Compilation:
+  class Demo                     class Demo extends Object
+  {                              {
+    {                              public Demo()
+      s.o.p("Inside              {
+        non-static block");          super();
+    }                                s.o.p("Inside non-static block");
+    public Demo()                    s.o.p("Inside constructor");
+    {                              }
+      s.o.p("Inside            }
+        constructor");
+    }
+  }
+
++-----------------------------+----------------------------------+
+  | Static Methods              | Instance Methods                 |
+  +-----------------------------+----------------------------------+
+  | Do NOT require an object    | Require an object of a class     |
+  | to be called. Can be called | to be called. Called ONLY using  |
+  | via class name OR object    | object reference.                |
+  +-----------------------------+----------------------------------+
+  | Can access ONLY static      | Can directly access BOTH static  |
+  | variables & methods. Cannot | AND non-static members.          |
+  | directly access non-static  |                                  |
+  | members.                    |                                  |
+  +-----------------------------+----------------------------------+
+  | this & super keywords       | this & super keywords CAN be     |
+  | CANNOT be used              | used                             |
+  +-----------------------------+----------------------------------+
+  | Resolved using COMPILE-TIME | Resolved using RUNTIME binding   |
+  | (early) binding             | (late binding)                   |
+  +-----------------------------+----------------------------------+
+  | Generic methods (code that  | Specific methods (code that      |
+  | can be shared across all    | operates on instance variables   |
+  | instances) -- UTILITY       | of an object) -- INSTANCE        |
+  | METHODS                     | METHODS                          |
+  | e.g. String.join("-",       | e.g. String str = new String()   |
+  |       "Raja","Ram")         |      str.indexOf('u'); // 3      |
+  | output: Raja-Ram            |                                  |
+  +-----------------------------+----------------------------------+
+
+
+
+  +-----------------------------+----------------------------------+
+  | Static Variables            | Non-Static Variables             |
+  | (Class Variables)           | (Instance Variables / Fields)    |
+  +-----------------------------+----------------------------------+
+  | Declared within a class,    | Declared within a class, but     |
+  | outside a method,           | outside a method, constructor    |
+  | constructor, or any block   | or any block WITHOUT the static  |
+  | WITH the static keyword     | keyword                          |
+  +-----------------------------+----------------------------------+
+  | Allocated memory at CLASS   | Allocated memory at OBJECT       |
+  | LOADING time. Deallocated   | CREATION time. Deallocated once  |
+  | once the class is unloaded  | the object is destroyed          |
+  +-----------------------------+----------------------------------+
+  | Allocated memory ONLY ONCE  | Allocated memory EVERY TIME an   |
+  | throughout the program      | object is created                |
+  +-----------------------------+----------------------------------+
+  | Accessed WITHOUT creating   | Can ONLY be accessed by creating |
+  | an object, by using class   | an object of a class             |
+  | name                        |                                  |
+  +-----------------------------+----------------------------------+
+  | Can be accessed within      | Can be accessed ONLY within      |
+  | BOTH static AND non-static  | non-static members of a class    |
+  | members                     |                                  |
+  +-----------------------------+----------------------------------+
+  | Should be SHARED among      | Specific to THAT instance of     |
+  | all instances of a class    | the class                        |
+  +-----------------------------+----------------------------------+
+
+
+  +------------------------+----------------------------------+
+  | Static Blocks (SIB)    | Instance Blocks (IIB)            |
+  +------------------------+----------------------------------+
+  | Also called Static     | Also called Instance             |
+  | Initialization Block   | Initialization Block             |
+  +------------------------+----------------------------------+
+  | Executed at CLASS      | Executed at OBJECT CREATION      |
+  | LOADING time           | time, before constructor         |
+  +------------------------+----------------------------------+
+  | Executed ONLY ONCE     | Executed EVERY TIME an object    |
+  |                        | is created                       |
+  +------------------------+----------------------------------+
+  | Can access only STATIC | Can access BOTH static AND       |
+  | variables & methods    | non-static members               |
+  +------------------------+----------------------------------+
+  | super & this keywords  | super & this keywords CAN be     |
+  | CANNOT be used         | used                             |
+  +------------------------+----------------------------------+
+  | Used to initialize     | Used to initialize instance      |
+  | static variables &     | variables & execute code every   |
+  | execute code before    | time an object is created,       |
+  | main()                 | through which constructor        |
+  +------------------------+----------------------------------+
+
+
+
+class Demo {
+    private Demo() {
+        System.out.println("Constructor");
+    }
+
+    public static void main(String[] args) {
+        Demo d = new Demo(); // VALID
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Demo d = new Demo(); // ERROR
+    }
+}
+
+  class Dog
+  {
+    private String breed;
+    private float age;
+    private int price;
+    private Dog()   // private constructor
+    {
+      breed = "Pug"; age = 4.5f; price = 6666;
+    }
+    public static Dog getInstance()  // factory method (static)
+    {
+      Dog d = new Dog(); // creates object INSIDE class (allowed)
+      return d;
+    }
+  }
+
+  // In main():
+  Dog d = new Dog();          // COMPILE ERROR -- constructor is private
+  Dog m = Dog.getInstance();  // OK -- using factory method
+  Dog n = Dog.getInstance();  // m and n point to DIFFERENT objects
+
+
+
+class Demo {
+    private static Demo obj = new Demo();
+    private Demo() {
+        System.out.println("Object Created");
+    }
+    public static Demo getObject() {
+        return obj;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        Demo d1 = Demo.getObject();
+
+        Demo d2 = Demo.getObject();
+
+        System.out.println(d1 == d2); // true
+    }
+}
+/*
+Output:
+Object Created
+true
+*/
+
+
+
+
+```
+
+
+## Association
+```java
+
+  +------------------+-----------------------------------------------+
+  | Type             | Description                                   |
+  +------------------+-----------------------------------------------+
+  | One to One       | 1 object of A  ---->  1 object of B           |
+  | One to Many      | 1 object of A  ----> many objects of B        |
+  | Many to One      | Many objects of A ---->  1 object of B        |
+  | Many to Many     | Many objects of A ----> many objects of B     |
+  +------------------+-----------------------------------------------+
+
+
+Target Object / Main Object / Container Object
+-----------------------------------------------
+        * The object that HOLDS reference to another object
+
+Dependent Object / Helper Object / Contained Object
+----------------------------------------------------
+        * The object that is HELD INSIDE the target object
+
+
+
+DEPENDENCY INJECTION 
+---------------------
+
+   Two ways to perform DEPENDENCY INJECTION:
+  +-------------------------+------------------------------------------------+
+  | Type                    | When to Use                                    |
+  +-------------------------+------------------------------------------------+
+  | Constructor Injection   | Dependent object is READY at target creation   |
+  | Setter Injection        | Dependent object is NOT READY at creation time |
+  +-------------------------+------------------------------------------------+
+
+  Both types can:
+    -> Inject a primitive value into an object
+    -> Inject an object into another object
+
+
+
+ONE-TO-ONE ASSOCIATION   
+=======================
+In a One-to-One (1:1) Association:
+   ->  One object is associated with exactly one object.
+   ->  The other object is also associated with exactly one object.
+
+One Person  ------> One Passport
+One Passport ------> One Person
+
+Person <--one-to-one-----> Passport
+
+class Passport {
+    String passportNumber;
+    Passport(String passportNumber) { // construction
+        this.passportNumber = passportNumber;
+    }
+    void displayPassport() {
+        System.out.println("Passport Number : "
+                            + passportNumber);
+    }
+}
+
+class Person {
+    String name;
+    Passport passport;
+    Person(String name, Passport passport) {
+        this.name = name;
+        this.passport = passport;
+    }
+    void displayPerson() {
+
+        System.out.println("Name : " + name);
+
+        passport.displayPassport();
+    }
+}
+
+
+public class Test {
+    public static void main(String[] args) {
+        Passport p1 = new Passport("IND12345"); 
+                // dependent object is ready
+
+
+        // Constrctor Injection
+        Person person = new Person("Rahul", p1);
+
+        person.displayPerson();
+    }
+}
+
+class Employee {
+
+    String name;
+    Address address;
+}
+
+class Address {
+
+    String city;
+    Employee employee;
+}
+
+MANY-TO-ONE ASSOCIATION       
+=======================
+Definition:
+    MANY objects of one entity map to ONE object of another entity.
+
+Real Life Example:
+Many Employees  ------> One Department
+Many Students   ------> One College
+Many Customers  ------> One Bank
+Many Citizens   ------> One Country
+
+
+Rahul  ---------+
+                |
+Amit   ---------|-----> IT Department
+                |
+Rohan  ---------+
+
+
+class Department {
+    int deptId;
+    String deptName;
+
+    Department(int deptId, String deptName) {
+        this.deptId = deptId;
+        this.deptName = deptName;
+    }
+
+    void displayDepartment() {
+        System.out.println("Department Id   : " + deptId);
+        System.out.println("Department Name : " + deptName);
+    }
+}
+
+class Employee {
+    int empId;
+    String empName;
+    Department department;
+
+    Employee(int empId,
+             String empName,
+             Department department) {
+
+        this.empId = empId;
+        this.empName = empName;
+        this.department = department;
+    }
+
+    void displayEmployee() {
+
+        System.out.println("Employee Id   : " + empId);
+        System.out.println("Employee Name : " + empName);
+        System.out.println("Department Details");
+        department.displayDepartment();
+    }
+}
+
+public class ManyToOneDemo {
+
+    public static void main(String[] args) {
+
+        Department d1 =
+                new Department(101, "IT");
+        Employee e1 =
+                new Employee(1, "Rahul", d1);
+        Employee e2 =
+                new Employee(2, "Amit", d1);
+        Employee e3 =
+                new Employee(3, "Rohan", d1);
+        e1.displayEmployee();
+
+        System.out.println();
+        e2.displayEmployee();
+
+        System.out.println();
+        e3.displayEmployee();
+    }
+}
+
+ONE-TO-MANY ASSOCIATION  
+=======================
+Definition:
+    One object of one entity is mapped to MANY objects of another entity.
+
+                 Department
+                      |
+        +-------------+-------------+
+        |             |             |
+     Employee1    Employee2    Employee3
+
+    One Department contains many Employees.
+
+
+class Employee {
+    int empId;
+    String empName;
+
+    Employee(int empId, String empName) {
+        this.empId = empId;
+        this.empName = empName;
+    }
+
+    void displayEmployee() {
+        System.out.println("Employee Id   : " + empId);
+        System.out.println("Employee Name : " + empName);
+    }
+}
+
+
+class Department {
+    int deptId;
+    String deptName;
+    Employee[] employees;
+
+    Department(int deptId,
+               String deptName,
+               Employee[] employees) {
+
+        this.deptId = deptId;
+        this.deptName = deptName;
+        this.employees = employees;
+    }
+
+    void displayDepartment() {
+        System.out.println("Department Id   : " + deptId);
+        System.out.println("Department Name : " + deptName);
+        System.out.println("\nEmployee Details:");
+
+        for(Employee emp : employees) {
+            emp.displayEmployee();
+            System.out.println();
+        }
+    }
+}
+
+
+
+
+
+
+public class OneToManyDemo {
+    public static void main(String[] args) {
+        Employee e1 =
+            new Employee(101, "Rahul");
+        Employee e2 =
+            new Employee(102, "Amit");
+        Employee e3 =
+            new Employee(103, "Rohan");
+        Employee[] empArray = {e1, e2, e3};
+
+        Department dept =
+            new Department(
+                10,
+                "IT",
+                empArray
+            );
+        dept.displayDepartment();
+    }
+}
+
+
+MANY-TO-MANY ASSOCIATION    
+=========================
+Definition:
+    MANY objects of one entity map to MANY objects of another entity.
+
+Student1 ----+
+             |
+             +------ Java
+             |
+Student2 ----+
+             |
+             +------ Python
+             |
+Student3 ----+
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Student {
+
+    int studentId;
+    String studentName;
+
+    List<Course> courses;
+
+    Student(int studentId, String studentName) {
+        this.studentId = studentId;
+        this.studentName = studentName;
+        this.courses = new ArrayList<>();
+    }
+}
+
+class Course {
+
+    int courseId;
+    String courseName;
+
+    List<Student> students;
+
+    Course(int courseId, String courseName) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.students = new ArrayList<>();
+    }
+}
+
+public class ManyToManyDemo {
+    public static void main(String[] args) {
+        Student s1 =
+            new Student(1, "Rahul");
+        Student s2 =
+            new Student(2, "Amit");
+        Course c1 =
+            new Course(101, "Java");
+        Course c2 =
+            new Course(102, "Python");
+        // Association
+        s1.courses.add(c1);
+        s1.courses.add(c2);
+
+        s2.courses.add(c1);
+
+        c1.students.add(s1);
+        c1.students.add(s2);
+
+        c2.students.add(s1);
+
+        // Display
+
+        System.out.println("Courses of Rahul");
+        for(Course c : s1.courses) {
+            System.out.println(c.courseName);
+        }
+        System.out.println();
+
+        System.out.println("Students in Java Course");
+        for(Student s : c1.students) {
+            System.out.println(s.studentName);
+        }
+    }
+}
+
+
+                          +-------------+
+                          | Association |
+                          +-------------+
+                           /           \
+                     Weak /             \ Strong
+                         /               \
+               +--------------+     +-------------+
+               | Aggregation  |     | Composition |
+               +--------------+     +-------------+
+               (Loose-bound)         (Tight-bound)
+               Container obj         Contained obj
+               can exist alone       dies with container
+
+
+ COMPOSITION (Tight-bound Has-A):
+  ----------------------------------
+    * Contained object is CREATED INSIDE the container
+    * If container is destroyed -> contained object ALSO destroyed
+    * Container and contained have SAME lifetime
+
+    Example: Student HAS-A Heart, Student HAS-A Brain
+    (Heart/Brain cannot exist without Student)
+
+    +---------+       +-------+
+    | Student  |◆------| Heart |  (filled diamond = Composition)
+    |          |◆------| Brain |
+    +----------+       +-------+
+
+    class Student {
+        // Composite objects (created INSIDE Student)
+        public Heart heart = new Heart(72, 932);
+        public Brain brain = new Brain("gray", 150);
+    }
+
+AGGREGATION (Loose-bound Has-A):
+  ----------------------------------
+    * Contained object is CREATED OUTSIDE the container
+    * If container is destroyed -> contained object STILL accessible
+    * Injected via setter (loose connection)
+
+    Example: Student HAS-A Bike, Student HAS-A Book
+    (Bike/Book can exist without Student)
+
+    +-----------+        +------+
+    | Student   |◇-------| Bike |  (empty diamond = Aggregation)
+    |           |◇-------| Book |
+    +-----------+        +------+
+
+    class Student {
+        // Aggregate objects (created OUTSIDE, injected)
+        public Bike bike;
+        public Book book;
+
+        public void setBike(Bike bike) { this.bike = bike; }
+        public void setBook(Book book) { this.book = book; }
+    }
+
+Definition:
+    * Delegation = handing over RESPONSIBILITY for a task to another
+      class or method
+    * An object EXPRESSES certain behaviour to the outside world
+      but DELEGATES the actual implementation to an associated object
+
+    
+Flow:
+    +-------------+  wash()   +------------+  wash()   +--------+
+    | Boss/Owner  |---------->| Supervisor |---------->| Worker |
+    |             |  delegate |            |  delegate |        |
+    +-------------+           +------------+           +--------+
+                               (delegates                (actual
+                                the work)                 work done)
+
+
+class Owner {
+        public static void main(String[] args) {
+            Supervisor s = new Supervisor();
+            s.wash();    // Owner calls Supervisor
+            s.dust();
+            s.clean();
+        }
+    }
+    class Supervisor {
+        Worker w = new Worker();   // Has-A variable
+
+        public void wash()  { w.wash();  }  // delegates to Worker
+        public void dust()  { w.dust();  }
+        public void clean() { w.clean(); }
+    }
+
+    class Worker {
+        public void wash()  { s.o.p("Washing...");  }
+        public void dust()  { s.o.p("Dusting...");  }
+        public void clean() { s.o.p("Cleaning..."); }
+    }
+
+  Output:
+    Washing...
+    Dusting...
+    Cleaning...
+
+
+
+  +--------------------+---------------------------+------------------------+
+  | Concept            | Key Point                 | How Achieved           |
+  +--------------------+---------------------------+------------------------+
+  | Has-A              | Association via variable  | has-a variable         |
+  | Is-A               | Inheritance               | extends keyword        |
+  | Constructor Inject | Inject at creation time   | parameterized constr.  |
+  | Setter Inject      | Inject after creation     | setter method          |
+  | One-to-One         | 1 ref variable            | Account acc;           |
+  | One-to-Many        | Array of refs in target   | Employee[] employees;  |
+  | Many-to-One        | Many share 1 dependent    | same obj passed to all |
+  | Many-to-Many       | Arrays on both sides      | Project[] / varargs    |
+  | Composition        | Tight-bound, same lifetime| new inside class       |
+  | Aggregation        | Loose-bound, independent  | setter injection       |
+  | Delegation         | Pass responsibility on    | Has-A + method call    |
+  +--------------------+---------------------------+------------------------+
+
+
+
+  
+
+```
+
