@@ -5863,6 +5863,282 @@ class Owner {
 
 
   
+                    [Polymorphism]
+                    /            \
+        [Compile-Time]          [Run-Time]
+        Static/Early            Dynamic/Late
+        Binding                  Binding
+            |                       |
+    Method Overloading      Method Overriding
+
+
+  TIGHT COUPLING (NOT polymorphic)
+  ---------------------------------
+  Child-type reference --> Child-type object
+
+    Child1 c1 = new Child1();   <-- 3 references
+    Child2 c2 = new Child2();
+    Child3 c3 = new Child3();
+
+    Relationship: 3:3  =>  NOT polymorphic  X
+
+
+  LOOSE COUPLING / UPCASTING (Polymorphic)
+  -----------------------------------------
+  Parent-type reference --> Child-type object
+
+    Parent ref;
+    ref = c1;   <-- 1 reference
+    ref = c2;
+    ref = c3;
+
+    Relationship: 1:3 (1:M)  =>  Polymorphic  ✓
+
+
+
+Variables  -> Reference Type
+
+Static Methods -> Reference Type
+
+Instance Methods (Overridden) -> Object Type
+
+
+class Shape
+{
+    void draw(){
+        System.out.println("Shape");
+    }
+}
+
+class Circle extends Shape
+{
+    void draw(){
+        System.out.println("Circle");
+    }
+}
+
+class Rectangle extends Shape
+{
+    void draw(){
+        System.out.println("Rectangle");
+    }
+}
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        Shape s;
+
+        s = new Circle();
+        s.draw();
+
+        s = new Rectangle();
+        s.draw();
+    }
+}
+
+
+
+class Parent
+{
+    int x = 10;               // instance variable
+
+    static void staticMethod()
+    {
+        System.out.println("Parent Static");
+    }
+
+    void display()
+    {
+        System.out.println("Parent Display");
+    }
+}
+
+class Child extends Parent
+{
+    int x = 20;               // instance variable
+
+    static void staticMethod()
+    {
+        System.out.println("Child Static");
+    }
+
+    @Override
+    void display()
+    {
+        System.out.println("Child Display");
+    }
+}
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        Parent p = new Child();
+
+        System.out.println(p.x); // 10
+
+        p.staticMethod(); // Parent Static
+
+        p.display(); // Child Display
+    }
+}
+
+
+
+
+Limitation of parent-type reference:
+  -------------------------------------
+  Using parent ref --> can access ONLY inherited & overridden methods
+                   --> CANNOT access specialized (child-only) methods
+
+    ref.eat();   X  Compile Error  (eat() is child-specific)
+
+
+  Solution: DOWN-CASTING
+  -----------------------
+  Temporarily convert parent-type ref --> child-type ref
+
+    ((Child1)(ref)).eat();   ✓  Works!
+    ((Child2)(ref)).eat();   ✓  Works!
+    ((Child3)(ref)).eat();   ✓  Works!
+
+  Down-casting = temporarily converting parent-type reference
+                 to child-type so specialized methods are accessible
+
+
+  LOOSE COUPLING vs DOWN-CASTING SUMMARY
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  +------------------+---------------------------+
+  |  Loose Coupling  |  Tight Coupling           |
+  |  (Upcasting)     |  + Down-casting           |
+  +------------------+---------------------------+
+  | Polymorphism ✓   | Access specialized        |
+  | Code flexibility | methods of child class ✓  |
+  | Code reduction   |                           |
+  +------------------+---------------------------+
+
+  Upcasting:     child c = new Child();
+                 Parent ref = c;        <-- parent ref to child obj
+
+  Downcasting:   ((Child)(ref)).eat();  <-- temp convert back
+
+
+
+
+Parent ref = new Child();
+
+ref.parentMethod()      ✅
+
+ref.childMethod()       ❌
+
+((Child)ref).childMethod()   ✅
+
+
+Compiler resolves method call based on:
+    -> Name of method
+    -> Number of parameters
+    -> Data type of parameters
+    -> Sequence of parameters
+
+  class Addition {
+      public int    add(int a, int b)       { return a+b; }
+      public float  add(int a, float b)     { return a+b; }
+      public float  add(float a, float b)   { return a+b; }
+      public double add(double a, double b) { return a+b; }
+  }
+
+  a.add(45.5f, 75);   <-- resolved at COMPILE TIME
+
+
+Also called:
+    - Real / True Polymorphism
+    - Dynamic Polymorphism
+    - Late Binding / Dynamic Binding
+    - Dynamic Method Dispatch
+    - Virtual Method Invocation
+
+  Parent ref = new Child1();
+               ref ---> [Child1] [Child2] [Child3]
+                           X        X        X
+  ref.cry() resolves at RUN-TIME to whichever object ref points to
+
+
+  - Static members ARE inherited in Java
+  - Static methods CANNOT be overridden
+    (resolved at compile-time based on reference type)
+  - Same-name static in child = METHOD HIDING (not overriding)
+
+  +--------+---------+-------------------+------------------+
+  | Case   | Parent  | Child             | Result           |
+  +--------+---------+-------------------+------------------+
+  | Case 1 | static  | instance          | X  Can't override|
+  | Case 2 | instance| static            | X  Can't hide    |
+  | Case 3 | instance| instance          | ✓  Overriding    |
+  | Case 4 | static  | static            | ✓  Method Hiding |
+  +--------+---------+-------------------+------------------+
+
+  Case 4 example:
+    Parent ref1 = new Parent();  ref1.disp(); // Parent static
+    Child  ref2 = new Child();   ref2.disp(); // Child  static
+    Parent ref3 = new Child();   ref3.disp(); // Parent static
+                                              // (ref type wins!)
+
+  instanceof KEYWORD
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  - Checks whether an object is an instance of a class
+  - Also known as TYPE COMPARISON OPERATOR
+
+  Syntax:  objectName instanceof ClassName
+
+  Example: ref instanceof Child1   --> true / false
+
+    instanceof
+        ↓
+    "IS-A ?" Operator
+    Dog IS-A Animal ?  → true
+    Dog IS-A Object ?  → true
+    Dog IS-A Cat ?     → false
+
+    Animal a = new Dog();
+
+    System.out.println(a instanceof Animal); // true 
+    System.out.println(a instanceof Dog); // true 
+    System.out.println(a instanceof Object); // true 
+
+
+ QUICK REFERENCE CHEAT SHEET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Term                  Meaning
+  ---------------       ----------------------------------------
+  Polymorphism          One ref, many object forms (1:M)
+  Upcasting             Parent ref = Child obj  (loose coupling)
+  Downcasting           (Child)(parentRef)      (tight coupling)
+  Method Overloading    Same name, diff params  (compile-time)
+  Method Overriding     Child redefines parent  (run-time)
+  Method Hiding         Static method in child hides parent static
+  Dynamic Dispatch      Run-time method resolution
+  instanceof            Type comparison operator
+  Tight Coupling        Child ref = Child obj   (no polymorphism)
+  Loose Coupling        Parent ref = Child obj  (polymorphism ✓)
+
+══════════════════════════════════════════════════════════════════4
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```
 
