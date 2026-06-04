@@ -428,15 +428,258 @@
 ########################################################################################################################
 
 [
+    ["rank(debt/assets)*rank(working_capital)", 1.01, 0.75, 2.19, "FAIL"],
+    ["zscore(rank(debt/assets)+rank(working_capital))", 0.87, 0.73, 1.90, "FAIL"],
+    ["rank(debt/assets)+rank(working_capital)", 1.07, 0.86, 2.58, "FAIL"],
+    ["rank(debt/assets)+rank(inventory_turnover)", 1.34, 1.07, 3.10, "FAIL"], ******* failed because of Self-correlation 0.7209 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+
+    ["rank(debt/assets)+rank(revenue)", 0.99, 0.93, 2.54, "FAIL"],
+    ["group_rank(rank(debt/assets),industry)+group_rank(rank(revenue),industry)", 1.03, 0.91, 2.76, "FAIL"],
+]
+
+
+[
+    ["quality = rank(ebit / assets);
+efficiency = rank(sales / assets);
+-ts_zscore(enterprise_value / ebitda, 63) + quality + efficiency", 1.07, 0.59, 25.56, "FAIL"],
+
+    ["rank(ebit / sharesout / close)", 0.59, 0.45, 2.03, "FAIL"],
+
+    ["eps_ratio = rank(ebit / sharesout / close);
+trend = ts_av_diff(eps_ratio, 60);
+rank(trend)", 1.00, 0.62, 10.16, "FAIL"],
+
+    ["rank(ebit / capex)", 0.09, 0.03, 1.36, "FAIL"],
+
+    ["rank(sales / assets)", 0.91, 0.70, 1.90, "FAIL"],
+    ["rank(retained_earnings)", 0.04, 0.01, 2.86, "FAIL"],
+    ["rank(cash_st / debt_st)", -0.47, -0.23, 3.21, "FAIL"],
+    ["ts_zscore(enterprise_value / ebitda, 63)", -0.96, -0.59, 16.12, "FAIL"],
+    
+]
+
+[
+    ["value = -ts_zscore(enterprise_value / ebitda, 63);
+    quality = rank(ebit / assets);
+efficiency = rank(sales / assets);
+rank(value + quality + efficiency)", 1.10, 0.84, 13.15, "FAIL"],
+
+    ["base = rank(sales / assets) + rank(ebit / assets);
+ts_av_diff(base, 40)", 0.70, 0.37, 11.34, "FAIL"],
+
+    ["value = -rank(enterprise_value / ebitda);
+reversal = -ts_zscore(close, 20);
+rank(value + reversal)", 0.94, 0.55, 29.52, "FAIL"],
+
+    ["high_vol = ts_rank(ts_std_dev(returns, 60), 126) > 0.5;
+signal = rank(sales / assets);
+trade_when(high_vol, signal, -signal)", 0.89, 0.67, 1.58, "FAIL"],
+]
+
+
+
+[
+    ["rank(ts_rank(ebit / sharesout / close, 40))", 1.37, 1.05, 13.18, "FAIL"], ********* failed because of Self-correlation 0.7073 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+
+    ["-ts_zscore(close, 20)", 1.07, 0.69, 24.76, "FAIL"],
+    ["event = volume > adv20;
+alpha = -ts_delta(close, 5);
+trade_when(event, alpha, -1)", 1.42, 0.94, 27.14, "FAIL"],
+
+    ["-ts_rank(retained_earnings, 500)", 0.36, 0.20, 4.81, "FAIL"],
+]
+
+[    
+    ["0.8*(-rank(max_adjusted_net_income_guidance-min_adjusted_net_income_guidance))+0.2*rank(liabilities/assets)", 1.90, 1.64, 1.52, "FAIL"], #GOOD ****** failed because of Self-correlation 0.831 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+
+    ["0.7*(-rank(max_adjusted_net_income_guidance-min_adjusted_net_income_guidance))+0.3*rank(liabilities/assets)", 1.83, 1.60, 1.55, "PASS"], #GOOD @@@@@@@@@@@@@@@@ # SUBMITTED
+
+    ["0.8*(-rank(max_adjusted_net_income_guidance-min_adjusted_net_income_guidance))+0.2*group_rank(sales/equity,industry)", 1.03, 0.59, 1.63, "FAIL"], 
+]
+[
+    ["rank(mean_news_impact_projection)", 0.00, 0.00, 85.78, "FAIL"], 
+    ["rank(mean_merger_acquisition_sentiment)", 0.18, 0.02, 72.08, "FAIL"],
+    ["-rank(mdl177_garpanalystmodel_qgp_vfpriceratio)", 1.09, 1.05, 3.07, "FAIL"], ******** failed because of Sharpe of 1.09 is below cutoff of 1.25. and Sub-universe Sharpe of 0.46 is below cutoff of 0.47.
+
+    ["-rank(mdl177_fangma_gpam_usa_fangma_gpam11)", 1.10, 1.06, 3.06, "FAIL"], ****** failed because of Sharpe of 1.10 is below cutoff of 1.25. and Sub-universe Sharpe of 0.45 is below cutoff of 0.48.
+
+    ["-rank(mdl177_garpanalystmodel_qgp_vfpriceratio)", 1.09, 1.05, 3.07, "FAIL"], ******* failed because of Sharpe of 1.09 is below cutoff of 1.25. and Sub-universe Sharpe of 0.46 is below cutoff of 0.47.
+
     ["],
     ["],
     ["],
     ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
+]
+
+[
+    ["0.7*(-rank(max_adjusted_net_income_guidance/min_adjusted_net_income_guidance))+ 0.3*rank(liabilities/assets)", 1.80, 1.57, 1.53, "FAIL"], ********** failed because of Self-correlation 0.9989 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+
+    ["0.7*rank(anl4_ptp_flag)+ 0.3*rank(liabilities/assets)", 1.73, 1.53, 2.08, "FAIL"], ******** failed because of Self-correlation 0.9021 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+
+    ["0.5*(-rank(max_adjusted_net_income_guidance-min_adjusted_net_income_guidance))+ 0.3*rank(liabilities/assets)+ 0.2*rank(anl4_ptp_flag)", 1.84, 1.67, 1.87, "FAIL"], ******** failed because of Self-correlation 0.9819 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+]
+
+
+[
+    ["0.6*rank(mdl177_5shortsentimentfactor_act_util)+ 0.4*rank(mdl177_garpanalystmodel_qgp_vfpriceratio)", 0.48, 0.16, 23.84, "FAIL"],
+
+    ["-rank(mdl177_garpanalystmodel_qgp_vfpriceratio)", 1.09, 1.05, 3.07, "FAIL"], ******** failed because of Sharpe of 1.09 is below cutoff of 1.25. and Sub-universe Sharpe of 0.46 is below cutoff of 0.47.
+
+    ["rank(mdl177_5shortsentimentfactor_act_util)", 1.03, 0.62, 26.43, "FAIL"],
+]
+
+
+[
+    ["0.7*(-group_rank(mdl177_garpanalystmodel_qgp_vfpriceratio, industry))+ 0.3*rank(mdl177_5shortsentimentfactor_act_util)", 1.23, 1.23, 10.23, "FAIL"], ***** failed because of Sharpe of 1.23 is below cutoff of 1.25. and Sub-universe Sharpe of 0.48 is below cutoff of 0.53.
+
+    ["rank(ts_rank(mdl177_5shortsentimentfactor_act_util, 20))", -0.75, -0.22, 51.70, "FAIL"],
+    ["-0.5*rank(mdl177_garpanalystmodel_qgp_vfpriceratio)-0.5*group_rank(mdl177_garpanalystmodel_qgp_vfpriceratio, industry)", 1.14, 1.06, 3.30, "FAIL"], ******** failed because of Sharpe of 1.14 is below cutoff of 1.25. and Sub-universe Sharpe of 0.47 is below cutoff of 0.49.
+
+    ["-group_rank(mdl177_garpanalystmodel_qgp_vfpriceratio, industry)", 1.18, 1.06, 3.63, "FAIL"], ******* failed because of Sharpe of 1.18 is below cutoff of 1.25. and Sub-universe Sharpe of 0.48 is below cutoff of 0.51.
+
+    ["-rank(ts_mean(mdl177_garpanalystmodel_qgp_vfpriceratio, 5))", 1.07, 1.02, 2.41, "FAIL"], ******* failed because of Sharpe of 1.07 is below cutoff of 1.25.and Sub-universe Sharpe of 0.44 is below cutoff of 0.46.
+
+]
+
+[
+    ["0.7*(-group_rank(mdl177_garpanalystmodel_qgp_vfpriceratio, sector))+ 0.3*rank(mdl177_5shortsentimentfactor_act_util)", 1.19, 1.25, 11.32, "FAIL"], ****** failed because of Sharpe of 1.19 is below cutoff of 1.25.and Sub-universe Sharpe of 0.5 is below cutoff of 0.52.
+
+    ["0.5*(-group_rank(mdl177_garpanalystmodel_qgp_vfpriceratio, industry))+ 0.5*rank(mdl177_5shortsentimentfactor_act_util)", 1.19, 1.03, 17.95, "FAIL"], ********* failed because ofSharpe of 1.19 is below cutoff of 1.25. and Sub-universe Sharpe of 0.46 is below cutoff of 0.52. 
+
+    ["0.7*(-group_rank(mdl177_garpanalystmodel_qgp_vfpriceratio, subindustry))+ 0.3*rank(mdl177_5shortsentimentfactor_act_util)", 1.24, 1.18, 9.18, "FAIL"], ******* failed because of Sharpe of 1.24 is below cutoff of 1.25. and Sub-universe Sharpe of 0.53 is below cutoff of 0.54.
+
+    ["-rank(book_leverage_ratio_3)", 1.40, 1.12, 1.58, "FAIL"], ****** failed because of Sub-universe Sharpe of 0.57 is below cutoff of 0.61.
+
+    ["rank(mdl177_garpanalystmodel_qgp_relgrowth)", 1.51, 1.28, 3.35, "PASS"], @@@@@@@@@@@@@
+    ["-rank(mdl177_2_managementqualityfactor_saleicap)", 1.19, 1.01, 1.55, "FAIL"], ****** failed because of Sharpe of 1.19 is below cutoff of 1.25.
+
+]
+
+[
+    ["rank(ts_mean(mdl177_garpanalystmodel_qgp_relgrowth, 5))", 1.52, 1.29, 2.57, "FAIL"],
+    ["group_rank(mdl177_garpanalystmodel_qgp_relgrowth, sector)", 1.41, 1.13, 3.43, "FAIL"],
+    ["0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth)+ 0.3*(-rank(book_leverage_ratio_3))", 1.62, ,1.52, 3.39, "FAIL"],
+    ["0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth)+ 0.3*(-rank(max_adjusted_net_income_guidance - min_adjusted_net_income_guidance))", 1.60, 1.39, 3.33, "FAIL"],
+
+    ["-group_rank(book_leverage_ratio_3, sector)", 1.39, 1.07, 1.67, "FAIL"], ******* failed because of Sub-universe Sharpe of 0.58 is below cutoff of 0.6.
+
+    ["-group_rank(book_leverage_ratio_3, industry)", 1.46, 1.11, 1.78, "FAIL"], ****** failed because of Sub-universe Sharpe of 0.58 is below cutoff of 0.63.
+]
+
+[
+    ["0.6*(-rank(book_leverage_ratio_3))+ 0.4*rank(mdl177_garpanalystmodel_qgp_relgrowth)", 1.66, 1.60, 2.77, "FAIL"], # GOOD ******* failed because of Self-correlation 0.8375 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+
+    ["0.6*(-rank(book_leverage_ratio_3))+ 0.4*rank(mdl177_garpanalystmodel_qgp_capeff)", 0.14, 0.03, 2.44, "FAIL"],
+    ["0.6*(-rank(book_leverage_ratio_3))+ 0.4*rank(mdl177_garpanalystmodel_qgp_roefcf)", 1.02, 0.66, 2.17, "FAIL"],
+    ["-rank(mdl177_2_earningsqualityfactor_ttmaccu)", -0.79, -0.42, 2.22, "FAIL"],
+    ["-rank(mdl177_earningsqualityfactor_ttmaccu_alt)", -0.75, -0.39, 2.22, "FAIL"],
+    ["rank(mdl177_v1_400_yoychgda)", -0.94, -0.52, 2.35, "FAIL"],
+]
+
+[
+    ["rank(snt1_d1_earningsrevision)", 0.39, 0.13, 8.84, "FAIL"],
+    ["rank(snt1_d1_netearningsrevision)", -0.26, -0.05, 23.25, "FAIL"],
+    ["rank(snt1_d1_earningssurprise)", 0.34, 0.10, 2.49, "FAIL"],
+    ["rank(snt1_d1_netrecpercent)", -0.08, -0.01, 1.12, "FAIL"],
+    ["rank(snt1_d1_nettargetpercent)", -0.65, -0.36, 5.13, "FAIL"],
+    ["rank(snt1_cored1_score)", -0.46, -0.20, 10.17, "FAIL"],
+    ["rank(snt1_d1_uptargetpercent)", -0.45, -0.20, 5.39, "FAIL"],
+    ["-rank(snt1_d1_sellrecpercent)", -0.38, -0.12, 0.98, "FAIL"],
+    ["rank(snt1_cored1_score)", -0.46, -0.20, 10.17, "FAIL"],
+    ["-rank(snt1_d1_downtargetpercent)", -0.79, -0.43, 4.85, "FAIL"],
+    ["rank(snt1_d1_dynamicfocusrank)", -0.11, -0.03, 8.54, "FAIL"],
+    ["rank(snt1_d1_stockrank)", -0.36, -0.19, 4.09, "FAIL"],
+    ["rank(daily_equity_mood_indicator)", -1.11, -0.26, 41.41, "FAIL"],
+    ["rank(weekly_equity_mood_index)", -0.46, -0.20, 10.17, "FAIL"],
+    ["rank(snt1_d1_longtermepsgrowthest)", -0.11, -0.02, 1.15, "FAIL"],
+    ["rank(snt1_d1_fundamentalfocusrank)", -0.13, -0.04, 2.20, "FAIL"]
+    ["-rank(snt1_d1_dtstsespe)", -0.45, -0.25, 3.33, "FAIL"],
+    ["-rank(implied_volatility_call_270)", -0.09, -0.04, 11.46, "FAIL"],
+    ["-rank(historical_volatility_180)", -0.09, -0.03, 3.80, "FAIL"],
+    ["-rank(parkinson_volatility_120)", 0.02, 0.00, 3.62, "FAIL"],
+    
+]
+
+[
+    ["rank(mdl177_2_vma2_vma2_va)", -0.71, -0.57, 4.99, "FAIL"],
+    ["rank(mdl177_2_valuemomemtummodel_vma_composite)", -0.70, -0.49, 9.40, "FAIL"],
+    ["-rank(mdl177_earningsqualityfactor_ttmaccu_alt)", -0.75, -0.39, 2.22, "FAIL"],
+    ["rank(mdl177_5shortsentimentfactor_dmd_supply)", 1.12, 0.85, 2.98, "FAIL"],
+    ["-rank(mdl177_5shortsentimentfactor_dmd_conc)", -0.63, -0.45, 14.64, "FAIL"],
+    ["0.6*rank(mdl177_garpanalystmodel_qgp_relgrowth)+ 0.4*rank(mdl177_2_valuemomemtummodel_vma_composite)", 0.59, 0.32, 6.14, "FAIL"],
+    ["-rank(snt1_d1_buyrecpercent)", -0.01, -0.00, 1.14, "FAIL"],
+    ["-rank(snt1_d1_analystcoverage)", -0.22, -0.07, 1.59, "FAIL"]
+]
+
+[
+    ["group_rank(mdl177_5shortsentimentfactor_dmd_supply, industry)", 1.12, 0.82, 3.50, "FAIL"],
+    ["rank(ts_mean(mdl177_5shortsentimentfactor_dmd_supply, 10))", 1.13, 0.87, 1.91, "FAIL"],
+    ["rank(ts_mean(mdl177_5shortsentimentfactor_dmd_supply, 5))", 1.11, 0.84, 2.25, "FAIL"],
+    ["0.7*rank(mdl177_5shortsentimentfactor_dmd_supply)+ 0.3*rank(mdl177_garpanalystmodel_qgp_relgrowth)", 1.44, 1.26, 3.33, "FAIL"], ******* failed because of Self-correlation 0.8439 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+]
+
+[
+    ["rank(sales_growth)", -0.49, -0.21, 5.05, "FAIL"],
+    ["rank(cashflow_op / income)", 0.30, 0.11, 3.05, "FAIL"],
+    ["rank(operating_income / assets)", 0.37, 0.23, 2.45, "FAIL"],
+    ["-rank(goodwill / assets)", -0.11, -0.03, 2.14, "FAIL"],
+    ["rank(operating_income / invested_capital)", 0.41, 0.26, 2.68, "FAIL"],
+    ["-rank(capex / assets)", -0.81, -0.42, 1.83, "FAIL"]
+]
+
+[
+    ["group_rank(sales_growth, industry)", -0.34, -0.12, 5.34, "FAIL"],
+    ["group_rank(operating_income / assets, industry)", 0.33, 0.17, 2.79, "FAIL"],
+    ["group_rank(operating_income / assets, sector)", 0.36, 0.21, 2.67, "FAIL"],
+    ["group_rank(return_equity, industry)", 0.37, 0.18, 3.01, "FAIL"],
+    ["group_rank(return_assets, industry)", 0.14, 0.05, 2.90, "FAIL"],
+    ["group_rank(cashflow_op / sales, industry)", 0.19, 0.07, 2.04, "FAIL"],
+    ["rank(ts_delta(operating_income, 4))", -0.49, -0.12, 49.35, "FAIL"],
+    ["rank(ts_delta(return_equity, 4))", -0.21, -0.03, 49.44, "FAIL"],
+    ["rank(ts_delta(sales, 4))", -0.64, -0.18, 48.76,"FAIL"]
+]
+
+[
+    ["rank(operating_income / assets) + rank(mdl177_garpanalystmodel_qgp_relgrowth)", 0.86, 0.74, 3.90, "FAIL"],
+    ["rank(cashflow_op / (assets * mdl177_2_managementqualityfactor_saleicap))", 0.39, 0.24, 1.89, "FAIL"]
+]
+[
+    ["0.7*(-group_rank(mdl177_garpanalystmodel_qgp_vfpriceratio, subindustry))+ 0.3*rank(mdl177_5shortsentimentfactor_act_util)", -0.43, -0.21, 11.55, "FAL"],
+
+    ["rank(news_mins_10_pct_dn)", 0.73, 0.45, 167.26, "FAIL"],
+    ["-rank(news_atr_ratio)", 0.42, 0.06, 104.88, "FAIL"],
+    ["rank(news_indx_perf)", -0.36, -0.05, 122.99, "FAIL"],
+    ["rank(news_mins_10_pct_up)", 0.12, 0.03, 164.39, "FAIL"],
+    ["-rank(news_pe_ratio)", 0.09, 0.01, 75.50, "FAIL"],
+    ["rank(news_tot_ticks)", -0.43, -0.07, 105.5, "FAIL"],
+]
+
+[
+    ["rank(ts_mean(news_mins_10_pct_dn, 5))",  1.24, 0.85, 67.41, "FAIL"],
+    ["rank(ts_mean(news_mins_10_pct_dn, 10))",  0.88, 0.53, 39.73, "FAIL"],
+    ["rank(ts_mean(news_mins_10_pct_dn, 20))",  0.74, 0.42, 22.93, "FAIL"],
+    ["-rank(ts_mean(news_atr_ratio, 5))", 0.14, 0.01, ],
+    ["-rank(ts_mean(news_atr_ratio, 5))", | Sharpe: 0.14 | Fitness: 0.01],
+    ["-rank(ts_mean(news_atr_ratio, 10))", | Sharpe: -0.20 | Fitness: -0.03],
+    ["rank(ts_mean(news_indx_perf, 5))", | Sharpe: -0.58 | Fitness: -0.13],
+    ["rank(ts_mean(news_indx_perf, 10))", | Sharpe: 0.03 | Fitness: 0.00  ]
+
+]
+
+[
+    [❌ FAIL | roup_rank(ts_mean(news_mins_10_pct_dn, 5), industry) | Sharpe: 0.00 | Fitness: 0.00 | Turnover: 0.0%],
+    [❌ FAIL | group_rank(ts_mean(news_mins_10_pct_dn, 5), sector) | Sharpe: 1.31 | Fitness: 0.91 | Turnover: 68.5%],
+    [❌ FAIL | 0.7*rank(ts_mean(news_mins_10_pct_dn, 5))+ 0.3*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 1.71 | Fitness: 1.38 | Turnover: 67.8%] ********** failed because of Weight concentration 20.67% is above cutoff of 10% on 7/10/2019.
+]
+
+[
+    [❌ FAIL | group_rank(ts_mean(news_mins_10_pct_dn, 10), sector) | Sharpe: 0.89 | Fitness: 0.53 | Turnover: 40.7%]
+    [❌ FAIL | truncate(0.7*rank(ts_mean(news_mins_10_pct_dn, 5))+ 0.3*rank(mdl177_garpanalystmodel_qgp_relgrowth), 0.1) | Sharpe: 0.00 | Fitness: 0.00 | Turnover: 0.0%]
+
+    [❌ FAIL | 0.5*rank(ts_mean(news_mins_10_pct_dn, 5))+ 0.5*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 2.03 | Fitness: 1.84 | Turnover: 66.9%], #GOOD , failed because of Weight concentration 20.77% is above cutoff of 10% on 7/10/2019.
+
+    [❌ FAIL | rank(scl12_buzz) | Sharpe: -0.45 | Fitness: -0.05 | Turnover: 116.3%]
+    [❌ FAIL | rank(snt_social_value) | Sharpe: 0.50 | Fitness: 0.10 | Turnover: 34.1%]
+    [❌ FAIL | rank(snt_social_volume) | Sharpe: 0.40 | Fitness: 0.10 | Turnover: 30.5%]
+    [❌ FAIL | rank(ts_mean(snt_buzz, 5)) | Sharpe: 0.29 | Fitness: 0.06 | Turnover: 31.8%]
 ]
