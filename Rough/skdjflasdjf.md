@@ -796,14 +796,65 @@ trade_when(event, alpha, -1)", 1.42, 0.94, 27.14, "FAIL"],
 ]
 
 [
-    []
-    []
-    []
-    []
-    []
-    []
-    []
-    []
-    []
-    []
+    [✅ PASS | 0.3*rank(ts_decay_linear(ts_mean(news_mins_10_pct_dn,15),5)*rank(volume*close)+ts_decay_linear(ts_mean(news_mins_10_pct_dn,15),15)*(1-rank(volume*close)))+0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 2.77 | Fitness: 3.56 | Turnover: 25.1%] ❌ FAIL because of Sub-universe Sharpe of 1.17 is below cutoff of 1.2.
+
+    [✅ PASS | 0.3*group_rank(ts_decay_linear(ts_mean(news_mins_10_pct_dn,15),10),sector)+0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 2.78 | Fitness: 3.55 | Turnover: 25.4%] ❌ FAIL because of Sub-universe Sharpe of 1.16 is below cutoff of 1.2.
+
+    [✅ PASS | 0.3*group_zscore(ts_decay_linear(ts_mean(news_mins_10_pct_dn,15),10),sector)+0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 2.31 | Fitness: 2.51 | Turnover: 26.6%] ❌ FAIL because of Sub-universe Sharpe of 0.4 is below cutoff of 1.
+
+    [✅ PASS | 0.3*rank(ts_decay_linear(ts_mean(news_mins_10_pct_dn,15),10))*rank(volume*close)+0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 2.72 | Fitness: 3.42 | Turnover: 26.7%]❌ FAIL because of Sub-universe Sharpe of 1.15 is below cutoff of 1.18.
+
+    [✅ PASS | 0.3*rank(0.5*ts_mean(news_mins_10_pct_dn,10)+0.5*ts_mean(news_mins_10_pct_dn,40))+0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 2.52 | Fitness: 2.86 | Turnover: 35.6%] ##Spectacular ✅ PASS 
+
+    [✅ PASS | 0.3*rank(ts_decay_linear(ts_mean(news_mins_10_pct_dn,5),5)*rank(volume*close)+ts_decay_linear(ts_mean(news_mins_10_pct_dn,20),15)*(1-rank(volume*close)))+0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 2.22 | Fitness: 2.16 | Turnover: 60.5%] ❌ FAIL because of Weight concentration 12.03% is above cutoff of 10% on 7/10/2019.
+
+]
+
+[
+    [❌ FAIL | 0.3*rank(0.5*ts_mean(news_atr14,10)+0.5*ts_mean(news_atr14,40))+0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth) | Sharpe: 1.08 | Fitness: 0.96 | Turnover: 8.4%]
+    [❌ FAIL | 0.3*rank(0.5*ts_mean(news_indx_perf,10)+0.5*ts_mean(news_indx_perf,40))+0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth) | Sharpe: 1.28 | Fitness: 0.93 | Turnover: 21.2%]
+    [✅ PASS | 0.3*rank(0.5*ts_mean(news_max_up_ret,10)+0.5*ts_mean(news_max_up_ret,40))+0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 1.27 | Fitness: 1.04 | Turnover: 16.8%] ❌ FAIL because of Self-correlation 0.7139 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+    [✅ PASS | 0.4*rank(0.5*ts_mean(news_mins_10_pct_dn,10)+0.5*ts_mean(news_mins_10_pct_dn,40))+0.6*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 2.52 | Fitness: 2.77 | Turnover: 36.2%] ## Spectacular ❌ FAIL because of Self-correlation 0.9847 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+    [✅ PASS | 0.3*rank(0.4*ts_mean(news_mins_10_pct_dn,10)+0.6*ts_mean(news_mins_10_pct_dn,60))+0.7*rank(mdl177_garpanalystmodel_qgp_relgrowth) Sharpe: 2.38 | Fitness: 2.64 | Turnover: 35.4%] ## Spectacular ❌ FAIL because of Self-correlation 0.9925 is above cutoff of 0.7 and Sharpe not better by 10.0% or more.
+]
+    
+
+[
+    [❌ FAIL | rank(abs_avg_pct_move_announcements_12) | Sharpe: 0.39 | Fitness: 0.21 | Turnover: 7.4%],
+    [❌ FAIL | rank(absolute_average_announcement_percent_move) | Sharpe: 0.33 | Fitness: 0.17 | Turnover: 2.5%],
+    [❌ FAIL | rank(announcement_effect_10) | Sharpe: 0.87 | Fitness: 0.65 | Turnover: 8.5%],
+    [❌ FAIL | rank(announcement_effect_9) | Sharpe: 0.90 | Fitness: 0.66 | Turnover: 8.5%],
+    [❌ FAIL | rank(announcement_effect_8) | Sharpe: 0.95 | Fitness: 0.71 | Turnover: 8.6%],
+    [❌ FAIL | rank(announcement_effect_7) | Sharpe: 1.13 | Fitness: 0.89 | Turnover: 8.8%],
+    [❌ FAIL | rank(best_fit_implied_announcement_effect) | Sharpe: 0.98 | Fitness: 0.20 | Turnover: 88.5%],
+    [❌ FAIL | rank(eighth_event_option_effect) | Sharpe: 1.04 | Fitness: 0.82 | Turnover: 3.7%],
+    [✅ PASS | rank(eighth_event_straddle_price_percent_of_equity) Sharpe: 1.77 | Fitness: 1.55 | Turnover: 7.9%], ❌ FAIL 
+    [❌ FAIL | rank(eighth_historical_announcement_percent_move) | Sharpe: 0.65 | Fitness: 0.22 | Turnover: 4.4%],
+    [❌ FAIL | ts_mean(rank(announcement_effect_10),10) | Sharpe: 0.97 | Fitness: 0.78 | Turnover: 2.4%],
+    [❌ FAIL | ts_mean(rank(announcement_effect_10),20) | Sharpe: 0.97 | Fitness: 0.79 | Turnover: 2.3%],
+    [❌ FAIL | ts_mean(rank(announcement_effect_9),10) | Sharpe: 0.97 | Fitness: 0.76 | Turnover: 2.5%],
+    [❌ FAIL | ts_mean(rank(announcement_effect_9),20) | Sharpe: 0.94 | Fitness: 0.73 | Turnover: 2.3%],
+    [❌ FAIL | ts_mean(rank(announcement_effect_8),10) | Sharpe: 1.05 | Fitness: 0.84 | Turnover: 2.6%],
+    [❌ FAIL | ts_mean(rank(announcement_effect_8),20) | Sharpe: 1.04 | Fitness: 0.84 | Turnover: 2.4%],
+    [❌ FAIL | ts_mean(rank(best_fit_implied_announcement_effect),10) | Sharpe: 0.69 | Fitness: 0.32 | Turnover: 19.2%],
+    [❌ FAIL | ts_mean(rank(best_fit_implied_announcement_effect),20) | Sharpe: 0.69 | Fitness: 0.42 | Turnover: 12.0%],
+    [❌ FAIL | ts_mean(rank(eighth_event_option_effect),10) | Sharpe: 1.05 | Fitness: 0.84 | Turnover: 2.6%],
+    [❌ FAIL | ts_mean(rank(eighth_historical_announcement_percent_move),20) | Sharpe: 0.08 | Fitness: 0.01 | Turnover: 3.2%],
+    [❌ FAIL | rank(best_fit_implied_announcement_effect-abs_avg_pct_move_announcements_12) | Sharpe: -0.24 | Fitness: -0.05 | Turnover: 48.6%],
+    [❌ FAIL | rank(best_fit_implied_announcement_effect-absolute_average_announcement_percent_move) | Sharpe: -0.18 | Fitness: -0.04 | Turnover: 45.8%],
+    [❌ FAIL | rank(eighth_event_option_effect-eighth_historical_announcement_percent_move) | Sharpe: -0.26 | Fitness: -0.06 | Turnover: 4.4%],
+    [❌ FAIL | rank(announcement_effect_10-announcement_effect_8) | Sharpe: 0.24 | Fitness: 0.06 | Turnover: 9.3%],
+    [❌ FAIL | rank(announcement_effect_10-announcement_effect_7) | Sharpe: 0.28 | Fitness: 0.08 | Turnover: 9.2%],
+    [❌ FAIL | rank(announcement_effect_9-announcement_effect_7) | Sharpe: 0.05 | Fitness: 0.00 | Turnover: 9.3%],
+    [❌ FAIL | rank(announcement_effect_8-announcement_effect_7) | Sharpe: -0.27 | Fitness: -0.06 | Turnover: 10.2%],
+    [❌ FAIL | rank(abs_avg_pct_move_announcements_12-best_fit_implied_announcement_effect) | Sharpe: 0.24 | Fitness: 0.05 | Turnover: 48.6%],
+    [❌ FAIL | rank(absolute_average_announcement_percent_move-best_fit_implied_announcement_effect) | Sharpe: 0.18 | Fitness: 0.04 | Turnover: 45.8%],
+    [❌ FAIL | rank(eighth_historical_announcement_percent_move-eighth_event_option_effect) | Sharpe: 0.26 | Fitness: 0.06 | Turnover: 4.4%],
+    [❌ FAIL | rank(ts_mean(best_fit_implied_announcement_effect,20)) | Sharpe: 0.68 | Fitness: 0.40 | Turnover: 11.8%],
+    [❌ FAIL | rank(ts_mean(announcement_effect_10,20)) | Sharpe: 0.96 | Fitness: 0.78 | Turnover: 2.3%],
+    [❌ FAIL | rank(ts_mean(announcement_effect_9,20)) | Sharpe: 0.94 | Fitness: 0.72 | Turnover: 2.4%],
+    [❌ FAIL | rank(best_fit_implied_announcement_effect)*rank(atm_volatility_month2) | Sharpe: 0.51 | Fitness: 0.13 | Turnover: 78.3%],
+    [❌ FAIL | rank(best_fit_implied_announcement_effect)*rank(avg_option_volume_20d) | Sharpe: 0.94 | Fitness: 0.24 | Turnover: 60.0%],
+    [❌ FAIL | 0.5*rank(ts_mean(best_fit_implied_announcement_effect,20))+0.5*rank(atm_volatility_month2) | Sharpe: 0.39 | Fitness: 0.15 | Turnover: 29.3%],
+    [✅ PASS | 0.5*rank(ts_mean(announcement_effect_10,20))+0.5*rank(avg_option_volume_20d) Sharpe: 1.57 | Fitness: 1.16 | Turnover: 9.5%], ❌ FAIL because of Weight is too strongly concentrated or too few instruments are assigned weight. Sub-universe Sharpe of 0.28 is below cutoff of 0.68.
 ]
