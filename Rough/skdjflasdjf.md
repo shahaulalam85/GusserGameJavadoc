@@ -953,22 +953,14 @@ trade_when(event, alpha, -1)", 1.42, 0.94, 27.14, "FAIL"],
 ]
 
 [
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
-    ["],
+    ["0.3*rank(ts_mean(announcement_effect_10,20))+0.7*rank(rel_num_all)", 1.14, 1.05, 1.84, ❌ FAIL], because of Sharpe of 1.14 is below cutoff of 1.25. (performance is -187)
+
+    ["rank(implied_volatility_call_180/parkinson_volatility_180)*rank(-returns)", 2.70, 1.56, 50.33, ❌ FAIL], because of Weight is too strongly concentrated or too few instruments are assigned weight. (performance is -379)
+
+    ["0.3*rank(ts_mean(announcement_effect_10,20))+0.7*rank(rel_num_part)", 1.17, 1.00, 1.71, ❌ FAIL], because of Sharpe of 1.17 is below cutoff of 1.25. Sub-universe Sharpe of 0.38 is below cutoff of 0.51.
+    ["0.7*rank(implied_volatility_call_180/parkinson_volatility_180)+0.3*rank(volume)", 2.19, 1.52, 20.31 , ❌ FAIL], because of Weight is too strongly concentrated or too few instruments are assigned weight.
+]
+
+[
+    []
 ]
