@@ -962,5 +962,113 @@ trade_when(event, alpha, -1)", 1.42, 0.94, 27.14, "FAIL"],
 ]
 
 [
+    [❌ FAIL | rank(zscore(implied_volatility_call_120/parkinson_volatility_120)) Sharpe: 1.93 | Fitness: 0.89 | Turnover: 45.3% ]
+    [❌ FAIL | rank(zscore(ts_backfill(implied_volatility_call_120/parkinson_volatility_120, 5))) Sharpe: 1.83 | Fitness: 0.84 | Turnover: 41.8% ]
+    [❌ FAIL | rank(implied_volatility_call_30 - implied_volatility_call_270) Sharpe: 0.32 | Fitness: 0.05 | Turnover: 72.0% ]
+    [❌ FAIL | rank(implied_volatility_mean_10 - implied_volatility_mean_120) Sharpe: 0.26 | Fitness: 0.04 | Turnover: 71.1% ]
+    [❌ FAIL | -rank(ts_delta(parkinson_volatility_120, 20)) Sharpe: -0.71 | Fitness: -0.39 | Turnover: 20.6%]
+]
+
+[
+
+    ✅ PASS | rank(ts_mean(zscore(implied_volatility_call_120/parkinson_volatility_120),20))
+    Sharpe: 1.46 | Fitness: 1.13 | Turnover: 5.5% | PnL: 📈 +$3.68M (performance is -6)
+
+    ❌ FAIL | group_rank(zscore(implied_volatility_call_120/parkinson_volatility_120),industry)
+    Sharpe: 1.99 | Fitness: 0.88 | Turnover: 46.6% | PnL: 📈 +$4.52M
+
+    ✅ PASS | group_rank(ts_mean(zscore(implied_volatility_call_120/parkinson_volatility_120),20),industry)
+    Sharpe: 1.45 | Fitness: 1.07 | Turnover: 7.0% | PnL: 📈 +$3.37M (performance is -16)
+
+
+    ❌ FAIL | rank(zscore(implied_volatility_call_120/parkinson_volatility_120))*rank(rel_num_part)
+    Sharpe: 1.69 | Fitness: 0.93 | Turnover: 34.4% | PnL: 📈 +$5.19M
+
+    ❌ FAIL | 0.5*rank(zscore(implied_volatility_call_120/parkinson_volatility_120))+0.5*rank(rel_num_part)
+    Sharpe: 1.79 | Fitness: 1.03 | Turnover: 34.3% | PnL: 📈 +$5.65M because of Weight concentration 11.41% is above cutoff of 10% on 1/25/2022.
+
+    ❌ FAIL | 0.3*rank(rel_num_part)+0.7*rank(zscore(implied_volatility_call_120/parkinson_volatility_120))
+   Sharpe: 1.91 | Fitness: 0.98 | Turnover: 42.1% | PnL: 📈 +$5.52M
+
+    ✅ PASS | 0.3*rank(rel_num_all)+0.7*rank(zscore(implied_volatility_call_120/parkinson_volatility_120))
+    Sharpe: 1.91 | Fitness: 1.01 | Turnover: 42.8% | PnL: 📈 +$5.93M failed because of Weight concentration 11.47% is above cutoff of 10% on 1/25/2022.
+
+    ✅ PASS | 0.5*rank(rel_num_part)+0.5*rank(zscore(implied_volatility_call_120/parkinson_volatility_120))
+    Sharpe: 1.79 | Fitness: 1.03 | Turnover: 34.3% | PnL: 📈 +$5.65M failed because of Weight concentration 11.41% is above cutoff of 10% on 1/25/2022.
+
+    ❌ FAIL | rank(rel_num_part)*rank(zscore(implied_volatility_call_120/parkinson_volatility_120))
+    Sharpe: 1.69 | Fitness: 0.93 | Turnover: 34.4% | PnL: 📈 +$5.19M
+
+    ❌ FAIL | rank(rel_num_all)*rank(zscore(implied_volatility_call_120/parkinson_volatility_120))
+    Sharpe: 1.66 | Fitness: 0.91 | Turnover: 37.5% | PnL: 📈 +$5.54M
+
     []
+
+    ✅ PASS | rank(ts_mean(zscore(implied_volatility_call_120/parkinson_volatility_120),10))
+    Sharpe: 1.43 | Fitness: 1.09 | Turnover: 8.5% | PnL: 📈 +$3.59M (performace is -45 )
+
+    ✅ PASS | rank(ts_mean(zscore(implied_volatility_call_120/parkinson_volatility_120),20))
+    Sharpe: 1.46 | Fitness: 1.13 | Turnover: 5.5% | PnL: 📈 +$3.68M ❌ FAIL
+
+
+    ✅ PASS | rank(ts_decay_linear(zscore(implied_volatility_call_120/parkinson_volatility_120),10))
+    Sharpe: 1.66 | Fitness: 1.27 | Turnover: 14.6% | PnL: 📈 +$4.24M failed because of Weight is too strongly concentrated or too few instruments are assigned weight.
+
+    ✅ PASS | rank(ts_decay_linear(zscore(implied_volatility_call_120/parkinson_volatility_120),20))
+    Sharpe: 1.62 | Fitness: 1.33 | Turnover: 12.0% | PnL: 📈 +$4.16M failed becasue of Weight concentration 11.55% is above cutoff of 10% on 1/25/2022.
+
+    ❌ FAIL | group_rank(zscore(implied_volatility_call_120/parkinson_volatility_120),industry)
+    Sharpe: 1.99 | Fitness: 0.88 | Turnover: 46.6% | PnL: 📈 +$4.52M
+
+    ⚠️  Score fetch failed: Expecting value: line 1 column 1 (char 0)
+    ✅ PASS | group_rank(ts_mean(zscore(implied_volatility_call_120/parkinson_volatility_120),10),industry)
+    Sharpe: 1.46 | Fitness: 1.08 | Turnover: 10.1% | PnL: 📈 +$3.38M (performance is -57)
+
+    ✅ PASS | group_rank(ts_mean(zscore(implied_volatility_call_120/parkinson_volatility_120),20),industry)
+    Sharpe: 1.45 | Fitness: 1.07 | Turnover: 7.0% | PnL: 📈 +$3.37M
+
+    ❌ FAIL | rank(zscore(implied_volatility_call_120/parkinson_volatility_120))*rank(rel_num_part)
+    Sharpe: 1.69 | Fitness: 0.93 | Turnover: 34.4% | PnL: 📈 +$5.19M
+
+    ❌ FAIL | rank(zscore(implied_volatility_call_120/parkinson_volatility_120))*rank(rel_num_all)
+    Sharpe: 1.66 | Fitness: 0.91 | Turnover: 37.5% | PnL: 📈 +$5.54M
+
+    ✅ PASS | 0.5*rank(zscore(implied_volatility_call_120/parkinson_volatility_120))+0.5*rank(rel_num_part)
+    Sharpe: 1.79 | Fitness: 1.03 | Turnover: 34.3% | PnL: 📈 +$5.65M failed because of Weight concentration 11.41% is above cutoff of 10% on 1/25/2022.
+
+
+    ❌ FAIL | rank(zscore(implied_volatility_call_90/parkinson_volatility_120))
+   Sharpe: 1.96 | Fitness: 0.88 | Turnover: 48.1% | PnL: 📈 +$4.76M
+
+    ❌ FAIL | rank(zscore(implied_volatility_call_60/parkinson_volatility_120))
+    Sharpe: 1.96 | Fitness: 0.81 | Turnover: 53.0% | PnL: 📈 +$4.51M
+
+    ❌ FAIL | rank(zscore(implied_volatility_call_180/parkinson_volatility_120))
+    Sharpe: 1.96 | Fitness: 0.95 | Turnover: 43.3% | PnL: 📈 +$5.00M
+
+    ❌ FAIL | rank(zscore(implied_volatility_mean_120/parkinson_volatility_120))
+    Sharpe: 1.42 | Fitness: 0.63 | Turnover: 38.4% | PnL: 📈 +$3.70M
+
+    ❌ FAIL | rank(zscore(implied_volatility_put_120/parkinson_volatility_120))
+    Sharpe: 0.89 | Fitness: 0.29 | Turnover: 43.4% | PnL: 📈 +$2.21M
+
+    ❌ FAIL | group_rank(zscore(implied_volatility_call_90/parkinson_volatility_120),industry)
+    Sharpe: 2.06 | Fitness: 0.91 | Turnover: 49.1% | PnL: 📈 +$4.73M
+
+    ❌ FAIL | group_rank(zscore(implied_volatility_call_60/parkinson_volatility_120),industry)
+    Sharpe: 2.04 | Fitness: 0.84 | Turnover: 53.7% | PnL: 📈 +$4.51M
+
+    ❌ FAIL | group_rank(zscore(implied_volatility_call_180/parkinson_volatility_120),industry)
+    Sharpe: 2.00 | Fitness: 0.92 | Turnover: 44.7% | PnL: 📈 +$4.71M
+
+    ✅ PASS | rank(ts_mean(zscore(implied_volatility_call_90/parkinson_volatility_120),20))
+    Sharpe: 1.41 | Fitness: 1.05 | Turnover: 5.9% | PnL: 📈 +$3.44M (performance is +7)
+
+    ✅ PASS | rank(ts_mean(zscore(implied_volatility_call_180/parkinson_volatility_120),20))
+    Sharpe: 1.52 | Fitness: 1.22 | Turnover: 5.3% | PnL: 📈 +$3.95M (performance is -15) 
+
+]
+
+[
+    
 ]
