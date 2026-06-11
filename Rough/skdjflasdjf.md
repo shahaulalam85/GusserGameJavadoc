@@ -1640,5 +1640,245 @@ Delay 1
 
 --- Chatgpt
 [
-    
+    [Delay 0] #0
+    ❌ FAIL | rank(ts_decay_linear(zscore(opt6_ivetfratio),20))
+   Sharpe: -0.05 | Fitness: -0.01 | Turnover: 4.0% | PnL: 📉 -$463.5K
+
+❌ FAIL | rank(ts_decay_linear(zscore(opt6_etfivhvxernratio),20))
+   Sharpe: 0.05 | Fitness: 0.01 | Turnover: 9.0% | PnL: 📈 +$131.0K
+
+✅ PASS | rank(ts_mean(zscore(opt6_fcstr2imp),20))
+   Sharpe: 1.26 | Fitness: 1.02 | Turnover: 1.6% | PnL: 📈 +$4.02M sharpe >2 to pass and fitness > 1.30 
+
+❌ FAIL | rank(ts_decay_linear(zscore(opt6_derivinffcst),15))
+   Sharpe: 0.36 | Fitness: 0.14 | Turnover: 5.5% | PnL: 📈 +$971.2K
+
+❌ FAIL | group_rank(ts_decay_linear(zscore(opt6_ivetfratioavg1m),20),industry)
+   Sharpe: 0.01 | Fitness: 0.00 | Turnover: 4.5% | PnL: 📈 +$56.6K
+
+❌ FAIL | group_rank(ts_decay_linear(zscore(opt6_ivhvxernratio),20),subindustry)
+   Sharpe: -0.17 | Fitness: -0.04 | Turnover: 9.5% | PnL: 📉 -$350.5K
+
+❌ FAIL | rank(ts_mean(zscore(opt6_impliediee),15))
+   Sharpe: 0.70 | Fitness: 0.40 | Turnover: 10.4% | PnL: 📈 +$2.06M
+
+❌ FAIL | rank(ts_decay_linear(zscore(opt6_etfsloperatioavg1m),20))
+   Sharpe: 0.55 | Fitness: 0.35 | Turnover: 4.4% | PnL: 📈 +$2.45M
+
+❌ FAIL | group_rank(ts_mean(zscore(opt6_correletf1y),20),industry)
+   Sharpe: 0.41 | Fitness: 0.21 | Turnover: 2.1% | PnL: 📈 +$1.56M
+
+❌ FAIL | rank(ts_decay_linear(zscore(opt6_fcstr2imp*opt6_ivetfratio),15))
+   Sharpe: 1.22 | Fitness: 0.98 | Turnover: 3.4% | PnL: 📈 +$4.01M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_derivinf,20)),subindustry)
+   Sharpe: 0.84 | Fitness: 0.43 | Turnover: 6.4% | PnL: 📈 +$1.64M
+
+❌ FAIL | rank(ts_mean(zscore(opt6_etfivhvxernratio1m),15))
+   Sharpe: 0.03 | Fitness: 0.00 | Turnover: 6.2% | PnL: 📈 +$72.9K
+
+❌ FAIL | group_rank(ts_decay_linear(zscore(opt6_ivetfratioavg1y),20),industry)
+   Sharpe: 0.01 | Fitness: 0.00 | Turnover: 4.5% | PnL: 📈 +$45.6K
+
+❌ FAIL | rank(ts_decay_linear(zscore(opt6_ivetfratiostd1y),20))
+   Sharpe: -0.07 | Fitness: -0.02 | Turnover: 4.1% | PnL: 📉 -$572.1K
+
+❌ FAIL | group_rank(ts_mean(zscore(opt6_etfsloperatioavgstd1y),20),industry)
+   Sharpe: 0.23 | Fitness: 0.07 | Turnover: 2.2% | PnL: 📈 +$617.0K
+
+
+   [Delay 1] #1
+
+❌ FAIL | rank(0.5*ts_mean(opt6_ivetfratio,10)+0.5*ts_mean(opt6_ivetfratio,40))
+   Sharpe: -0.08 | Fitness: -0.03 | Turnover: 2.6% | PnL: 📉 -$783.1K
+
+❌ FAIL | rank(0.5*ts_mean(opt6_ivhvxernratio,10)+0.5*ts_mean(opt6_ivhvxernratio,40))
+   Sharpe: -0.25 | Fitness: -0.08 | Turnover: 7.1% | PnL: 📉 -$659.2K
+
+❌ FAIL | rank(0.4*ts_mean(opt6_fcstr2imp,10)+0.6*ts_mean(opt6_fcstr2imp,60))
+   Sharpe: 1.18 | Fitness: 0.99 | Turnover: 1.4% | PnL: 📈 +$4.36M
+
+❌ FAIL | group_rank(ts_mean(opt6_derivinffcst,20),industry)
+   Sharpe: 0.68 | Fitness: 0.39 | Turnover: 4.0% | PnL: 📈 +$2.02M
+
+❌ FAIL | group_rank(ts_mean(opt6_impliediee,20),subindustry)
+   Sharpe: 0.91 | Fitness: 0.56 | Turnover: 9.2% | PnL: 📈 +$2.33M
+
+❌ FAIL | rank(ts_mean(opt6_etfsloperatioavg1y,20))
+   Sharpe: 0.63 | Fitness: 0.46 | Turnover: 1.6% | PnL: 📈 +$3.33M
+
+❌ FAIL | rank(ts_mean(opt6_etfivhvxernratio1y,20))
+   Sharpe: -0.16 | Fitness: -0.04 | Turnover: 1.7% | PnL: 📉 -$439.5K
+
+❌ FAIL | group_rank(ts_mean(opt6_ivetfratioavg1m,20),industry)
+   Sharpe: 0.07 | Fitness: 0.02 | Turnover: 3.0% | PnL: 📈 +$572.8K
+
+❌ FAIL | group_rank(ts_mean(opt6_ivetfratioavg1y,20),subindustry)
+   Sharpe: 0.10 | Fitness: 0.03 | Turnover: 3.4% | PnL: 📈 +$668.4K
+
+❌ FAIL | rank(ts_mean(opt6_correletf1y,30))
+   Sharpe: 0.47 | Fitness: 0.28 | Turnover: 1.6% | PnL: 📈 +$2.16M
+
+❌ FAIL | rank(ts_mean(opt6_correlspy1y,30))
+   Sharpe: 0.35 | Fitness: 0.18 | Turnover: 1.7% | PnL: 📈 +$1.66M
+
+❌ FAIL | group_rank(ts_mean(opt6_etfsloperatioavgstd1y,20),industry)
+   Sharpe: 0.58 | Fitness: 0.31 | Turnover: 2.1% | PnL: 📈 +$1.74M
+
+❌ FAIL | rank(ts_mean(opt6_am002vi,30))
+   Sharpe: -0.07 | Fitness: -0.02 | Turnover: 1.0% | PnL: 📉 -$696.5K
+
+❌ FAIL | group_rank(ts_mean(opt6_absavgernmv,20),subindustry)
+   Sharpe: 0.54 | Fitness: 0.32 | Turnover: 1.5% | PnL: 📈 +$2.15M
+
+❌ FAIL | rank(ts_mean(opt6_divyield,40))
+   Sharpe: 0.12 | Fitness: 0.04 | Turnover: 0.9% | PnL: 📈 +$678.4K
+
+    [Delay 1] #2
+
+    ❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_mean(opt6_ivetfratio,20))
+   Sharpe: 0.85 | Fitness: 0.69 | Turnover: 2.5% | PnL: 📈 +$4.10M
+
+❌ FAIL | rank(ts_mean(opt6_impliediee,20))*rank(ts_mean(opt6_derivinffcst,20))
+   Sharpe: 0.33 | Fitness: 0.14 | Turnover: 7.0% | PnL: 📈 +$1.12M
+
+❌ FAIL | rank(ts_mean(opt6_etfivhvxernratio1m,20))*rank(ts_mean(opt6_fcstr2imp,20))
+   Sharpe: 0.94 | Fitness: 0.64 | Turnover: 4.4% | PnL: 📈 +$2.85M
+
+❌ FAIL | 0.5*rank(ts_mean(opt6_ivetfratioavg1m,20))+0.5*rank(ts_mean(opt6_correlspy1y,20))
+   Sharpe: 0.23 | Fitness: 0.10 | Turnover: 2.9% | PnL: 📈 +$1.20M
+
+❌ FAIL | 0.5*rank(ts_mean(opt6_correletf1y,20))+0.5*rank(ts_mean(opt6_etfsloperatioavg1y,20))
+   Sharpe: 0.61 | Fitness: 0.42 | Turnover: 1.6% | PnL: 📈 +$2.91M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_derivinf,20))*rank(ts_mean(opt6_fcstr2imp,20)),industry)
+   Sharpe: 1.03 | Fitness: 0.75 | Turnover: 4.2% | PnL: 📈 +$3.25M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_impliediee,20))*rank(ts_mean(opt6_etfivhvxernratio1m,20)),subindustry)
+   Sharpe: 0.44 | Fitness: 0.20 | Turnover: 7.8% | PnL: 📈 +$1.26M
+
+❌ FAIL | rank(ts_decay_linear(opt6_ivetfratioavg1y,20))*rank(ts_decay_linear(opt6_fcstr2imp,20))
+   Sharpe: 0.85 | Fitness: 0.69 | Turnover: 3.2% | PnL: 📈 +$4.12M
+
+❌ FAIL | rank(ts_decay_linear(opt6_etfsloperatioavg1m,20))*rank(ts_decay_linear(opt6_derivinffcst,20))
+   Sharpe: 0.42 | Fitness: 0.22 | Turnover: 5.0% | PnL: 📈 +$1.74M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_ivetfratiostd1y,20)),industry)
+   Sharpe: -0.03 | Fitness: -0.01 | Turnover: 3.1% | PnL: 📉 -$240.1K
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_beta1y,20)),industry)
+   Sharpe: 0.27 | Fitness: 0.16 | Turnover: 2.2% | PnL: 📈 +$2.07M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_beta1m,20)),subindustry)
+   Sharpe: 0.14 | Fitness: 0.05 | Turnover: 6.6% | PnL: 📈 +$927.1K
+
+❌ FAIL | rank(ts_mean(opt6_divyield,20))*rank(ts_mean(opt6_divfreq,20))
+   Sharpe: 0.38 | Fitness: 0.21 | Turnover: 1.1% | PnL: 📈 +$1.94M
+
+❌ FAIL | rank(ts_mean(opt6_ioc,20))*rank(ts_mean(opt6_cvolu,20))
+   Sharpe: 0.14 | Fitness: 0.04 | Turnover: 2.2% | PnL: 📈 +$548.6K
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_absavgernmv,20)),industry)
+   Sharpe: 0.33 | Fitness: 0.16 | Turnover: 1.4% | PnL: 📈 +$1.47M
+
+]
+
+[
+    [Delay 0] #0
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20)-ts_mean(opt6_fcstr2imp,120))*rank(ts_delta(opt6_fcstr2imp,20))
+   Sharpe: 0.12 | Fitness: 0.03 | Turnover: 6.7% | PnL: 📈 +$303.8K
+
+❌ FAIL | rank(ts_decay_linear(ts_delta(opt6_fcstr2imp,20),10))*rank(ts_mean(opt6_fcstr2imp,60))
+   Sharpe: 1.15 | Fitness: 0.82 | Turnover: 6.3% | PnL: 📈 +$3.17M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_fcstr2imp,20)-ts_mean(opt6_fcstr2imp,80)),subindustry)
+   Sharpe: -0.15 | Fitness: -0.03 | Turnover: 3.8% | PnL: 📉 -$302.5K
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_mean(opt6_derivinf,20))*rank(ts_delta(opt6_derivinf,20))
+   Sharpe: 0.93 | Fitness: 0.36 | Turnover: 33.5% | PnL: 📈 +$2.54M
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_mean(opt6_derivinffcst,20))*rank(ts_delta(opt6_fcstr2imp,20))
+   Sharpe: 1.00 | Fitness: 0.72 | Turnover: 7.6% | PnL: 📈 +$3.20M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_mean(opt6_impliediee,20)),industry)
+   Sharpe: 0.95 | Fitness: 0.69 | Turnover: 6.8% | PnL: 📈 +$3.24M
+
+❌ FAIL | rank(ts_decay_linear(opt6_fcstr2imp,20))*rank(ts_decay_linear(opt6_derivinf,20))
+   Sharpe: 1.12 | Fitness: 0.83 | Turnover: 6.1% | PnL: 📈 +$3.44M
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20)-ts_mean(opt6_fcstr2imp,60))*rank(ts_mean(opt6_impliediee,20))
+   Sharpe: 0.39 | Fitness: 0.14 | Turnover: 7.2% | PnL: 📈 +$796.5K
+
+❌ FAIL | group_rank(rank(ts_delta(opt6_fcstr2imp,40))*rank(ts_mean(opt6_derivinf,20)),subindustry)
+   Sharpe: 0.45 | Fitness: 0.16 | Turnover: 8.1% | PnL: 📈 +$735.1K
+
+❌ FAIL | rank(ts_delta(opt6_fcstr2imp,20))*rank(ts_delta(opt6_derivinffcst,20))*rank(ts_mean(opt6_fcstr2imp,60))
+   Sharpe: 1.33 | Fitness: 0.85 | Turnover: 15.5% | PnL: 📈 +$3.14M
+
+
+   [Delay 1] #1
+
+
+❌ FAIL | 0.5*rank(ts_mean(opt6_fcstr2imp,20))+0.5*rank(ts_mean(opt6_derivinf,20))
+   Sharpe: 1.09 | Fitness: 0.92 | Turnover: 3.9% | PnL: 📈 +$4.39M
+
+❌ FAIL | 0.4*rank(ts_mean(opt6_fcstr2imp,20))+0.6*group_rank(ts_mean(opt6_derivinffcst,20),industry)
+   Sharpe: 0.75 | Fitness: 0.55 | Turnover: 3.9% | PnL: 📈 +$3.29M
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_mean(opt6_impliediee,20))
+   Sharpe: 0.92 | Fitness: 0.69 | Turnover: 5.4% | PnL: 📈 +$3.47M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_mean(opt6_derivinf,20)),industry)
+   Sharpe: 1.22 | Fitness: 1.03 | Turnover: 3.6% | PnL: 📈 +$4.39M
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20)-ts_mean(opt6_fcstr2imp,80))*rank(ts_mean(opt6_derivinffcst,20))
+   Sharpe: 0.42 | Fitness: 0.18 | Turnover: 3.9% | PnL: 📈 +$1.15M
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_delta(opt6_derivinf,40))
+   Sharpe: 1.21 | Fitness: 0.68 | Turnover: 24.4% | PnL: 📈 +$3.86M
+
+❌ FAIL | rank(ts_decay_linear(opt6_fcstr2imp,20))*rank(ts_mean(opt6_impliediee,20))
+   Sharpe: 0.91 | Fitness: 0.68 | Turnover: 5.8% | PnL: 📈 +$3.43M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_derivinf,20))*rank(ts_mean(opt6_impliediee,20)),industry)
+   Sharpe: 0.97 | Fitness: 0.69 | Turnover: 6.3% | PnL: 📈 +$3.09M
+
+❌ FAIL | 0.3*rank(ts_mean(opt6_fcstr2imp,20))+0.7*rank(ts_mean(opt6_derivinffcst,20))
+   Sharpe: 0.68 | Fitness: 0.46 | Turnover: 3.7% | PnL: 📈 +$2.81M
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_mean(opt6_derivinffcst,20))*rank(ts_mean(opt6_impliediee,20))
+   Sharpe: 0.63 | Fitness: 0.41 | Turnover: 5.6% | PnL: 📈 +$2.60M
+
+   [Delay 1] #2
+
+   ❌ FAIL | group_rank(rank(ts_mean(opt6_fcstr2imp,20)-ts_mean(opt6_fcstr2imp,120)),industry)
+   Sharpe: -0.03 | Fitness: -0.00 | Turnover: 3.0% | PnL: 📉 -$64.7K
+
+❌ FAIL | group_rank(rank(ts_delta(opt6_fcstr2imp,60)),industry)
+   Sharpe: -0.00 | Fitness: -0.00 | Turnover: 5.2% | PnL: 📉 -$2.3K
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20))*group_rank(ts_mean(opt6_derivinf,20),industry)
+   Sharpe: 1.00 | Fitness: 0.70 | Turnover: 4.1% | PnL: 📈 +$3.02M
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20))*group_rank(ts_mean(opt6_impliediee,20),subindustry)
+   Sharpe: 0.90 | Fitness: 0.59 | Turnover: 6.3% | PnL: 📈 +$2.69M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_derivinffcst,20))*rank(ts_mean(opt6_impliediee,20)),industry)
+   Sharpe: 0.48 | Fitness: 0.24 | Turnover: 6.5% | PnL: 📈 +$1.55M
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20)-ts_mean(opt6_fcstr2imp,60))*rank(ts_mean(opt6_derivinf,20)-ts_mean(opt6_derivinf,60))
+   Sharpe: 0.03 | Fitness: 0.00 | Turnover: 8.0% | PnL: 📈 +$46.7K
+
+❌ FAIL | rank(ts_decay_linear(opt6_fcstr2imp,20))*rank(ts_decay_linear(opt6_impliediee,20))
+   Sharpe: 0.99 | Fitness: 0.72 | Turnover: 7.0% | PnL: 📈 +$3.25M
+
+❌ FAIL | group_rank(rank(ts_delta(opt6_derivinffcst,40))*rank(ts_mean(opt6_fcstr2imp,20)),subindustry)
+   Sharpe: 1.31 | Fitness: 0.91 | Turnover: 9.5% | PnL: 📈 +$2.99M
+
+❌ FAIL | rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_delta(opt6_impliediee,40))*rank(ts_mean(opt6_derivinf,20))
+   Sharpe: 1.05 | Fitness: 0.62 | Turnover: 16.9% | PnL: 📈 +$2.92M
+
+❌ FAIL | group_rank(rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_mean(opt6_derivinffcst,20))*rank(ts_mean(opt6_impliediee,20)),industry)
+   Sharpe: 0.76 | Fitness: 0.52 | Turnover: 5.5% | PnL: 📈 +$2.91M
 ]
