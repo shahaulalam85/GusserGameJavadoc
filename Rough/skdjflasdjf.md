@@ -1882,3 +1882,100 @@ Delay 1
 ❌ FAIL | group_rank(rank(ts_mean(opt6_fcstr2imp,20))*rank(ts_mean(opt6_derivinffcst,20))*rank(ts_mean(opt6_impliediee,20)),industry)
    Sharpe: 0.76 | Fitness: 0.52 | Turnover: 5.5% | PnL: 📈 +$2.91M
 ]
+
+-- Claude
+
+[
+   [Delay 0]#0
+❌ FAIL | rank(ts_decay_linear(opt6_2rtscf, 20))
+   Sharpe: 0.82 | Fitness: 0.81 | Turnover: 1.9% | PnL: 📈 +$5.98M
+
+ERROR | rank(ts_decay_linear(opt6_2rtscf, 30)) | HTTPSConnectionPool(host='api.worldquantbrain.com', port=443): Read timed out. (read timeout=None)
+❌ FAIL | 0.6*rank(ts_decay_linear(opt6_2rtscf,20)) + 0.4*rank(ts_decay_linear(opt6_slopeavg1y,20))
+   Sharpe: 0.82 | Fitness: 0.84 | Turnover: 1.8% | PnL: 📈 +$6.42M
+
+❌ FAIL | rank(ts_decay_linear(opt6_slopeavg1y, 20))
+   Sharpe: 0.65 | Fitness: 0.54 | Turnover: 1.6% | PnL: 📈 +$4.22M
+
+❌ FAIL | rank(ts_decay_linear(opt6_slopeavg1y, 30))
+   Sharpe: 0.66 | Fitness: 0.55 | Turnover: 1.5% | PnL: 📈 +$4.26M
+
+❌ FAIL | rank(ts_decay_linear(opt6_ivpctile1m, 30))
+   Sharpe: 0.63 | Fitness: 0.39 | Turnover: 10.6% | PnL: 📈 +$2.31M
+
+❌ FAIL | 0.6*rank(ts_decay_linear(opt6_2rtscf,20)) + 0.4*rank(mdl177_garpanalystmodel_qgp_relgrowth)
+   Sharpe: 0.00 | Fitness: 0.00 | Turnover: 0.0% | PnL: 📉 $0
+
+❌ FAIL | 0.5*rank(ts_decay_linear(opt6_slopeavg1y,20)) + 0.5*rank(mdl177_garpanalystmodel_qgp_relgrowth)
+   Sharpe: 0.00 | Fitness: 0.00 | Turnover: 0.0% | PnL: 📉 $0
+
+❌ FAIL | -rank(ts_decay_linear(ts_delta(opt6_slopeavg1y,5),10))
+   Sharpe: 0.87 | Fitness: 0.52 | Turnover: 10.2% | PnL: 📈 +$2.17M
+
+❌ FAIL | 0.4*rank(ts_decay_linear(opt6_2rtscf,20)) + 0.3*rank(ts_decay_linear(opt6_slopeavg1y,20)) + 0.3*rank(ts_decay_linear(opt6_ivpctile1m,30))
+   Sharpe: 0.97 | Fitness: 1.04 | Turnover: 5.7% | PnL: 📈 +$7.13M
+
+❌ FAIL | rank(ts_decay_linear(opt6_px1kgam, 10))
+   Sharpe: -0.08 | Fitness: -0.02 | Turnover: 2.3% | PnL: 📉 -$405.6K
+
+❌ FAIL | -rank(ts_decay_linear(opt6_px1kgam, 20))
+   Sharpe: 0.09 | Fitness: 0.03 | Turnover: 2.0% | PnL: 📈 +$492.2K
+
+
+   [Delay 1] #1
+   ❌ FAIL | rank(ts_mean(best_fit_implied_announcement_effect,20))*rank(rel_num_all)
+   Sharpe: 0.78 | Fitness: 0.54 | Turnover: 5.7% | PnL: 📈 +$3.01M
+
+ERROR | rank(ts_mean(best_fit_implied_announcement_effect,20))*rank(rel_num_part) | HTTPSConnectionPool(host='api.worldquantbrain.com', port=443): Read timed out. (read timeout=None)
+❌ FAIL | rank(ts_mean(announcement_effect_10,20))*rank(rel_num_cust)
+   Sharpe: 0.79 | Fitness: 0.53 | Turnover: 2.0% | PnL: 📈 +$2.75M
+
+❌ FAIL | 0.5*rank(ts_mean(best_fit_implied_announcement_effect,20))+0.5*rank(rel_num_all)
+   Sharpe: 0.87 | Fitness: 0.68 | Turnover: 5.9% | PnL: 📈 +$3.75M
+
+❌ FAIL | 0.4*rank(ts_mean(best_fit_implied_announcement_effect,20))+0.6*rank(rel_num_part)
+   Sharpe: 0.92 | Fitness: 0.70 | Turnover: 5.0% | PnL: 📈 +$3.60M
+
+❌ FAIL | rank(ts_decay_linear(best_fit_implied_announcement_effect,20))*rank(rel_num_all)
+   Sharpe: 0.78 | Fitness: 0.54 | Turnover: 7.4% | PnL: 📈 +$2.96M
+
+❌ FAIL | group_rank(rank(ts_mean(best_fit_implied_announcement_effect,20)),industry)*rank(rel_num_all)
+   Sharpe: 0.93 | Fitness: 0.69 | Turnover: 6.0% | PnL: 📈 +$3.39M
+
+❌ FAIL | rank(ts_mean(announcement_effect_10,20))*rank(ts_mean(rel_num_all,20))
+   Sharpe: 1.01 | Fitness: 0.82 | Turnover: 1.9% | PnL: 📈 +$4.07M
+
+❌ FAIL | rank(best_fit_implied_announcement_effect)*rank(rel_num_all)*rank(rel_num_part)
+   Sharpe: 0.80 | Fitness: 0.52 | Turnover: 15.0% | PnL: 📈 +$3.12M
+
+❌ FAIL | rank(ts_mean(best_fit_implied_announcement_effect,10))*rank(ts_mean(rel_num_cust,20))
+   Sharpe: 0.58 | Fitness: 0.30 | Turnover: 9.1% | PnL: 📈 +$1.70M   
+
+   [Delay 1] #2
+❌ FAIL | 0.4*rank(0.5*ts_mean(news_mins_10_pct_dn,10)+0.5*ts_mean(news_mins_10_pct_dn,40)) + 0.6*rank(opt6_slopeavg1y)
+   Sharpe: -0.28 | Fitness: -0.13 | Turnover: 41.5% | PnL: 📉 -$4.70M
+
+❌ FAIL | rank(opt6_2rtscf)
+   Sharpe: 0.56 | Fitness: 0.40 | Turnover: 3.1% | PnL: 📈 +$3.12M
+
+❌ FAIL | rank(opt6_slopeavg1y)
+   Sharpe: 0.02 | Fitness: 0.00 | Turnover: 2.6% | PnL: 📈 +$198.0K
+
+ERROR | -rank(ts_delta(opt6_slopeavg1y,5)) | ('Connection aborted.', OSError(49, "Can't assign requested address"))
+❌ FAIL | 0.5*rank(opt6_2rtscf) + 0.5*(-ts_rank(fn_liab_fair_val_l1_a,129))
+   Sharpe: 0.46 | Fitness: 0.27 | Turnover: 3.1% | PnL: 📈 +$2.19M
+
+❌ FAIL | rank(opt6_ivpctile1m)
+   Sharpe: 0.89 | Fitness: 0.27 | Turnover: 76.2% | PnL: 📈 +$3.59M
+
+❌ FAIL | rank(ts_mean(opt6_ivpctile1m,10))
+   Sharpe: 0.27 | Fitness: 0.09 | Turnover: 19.9% | PnL: 📈 +$1.19M
+
+❌ FAIL | rank(opt6_correletf1y)
+   Sharpe: -0.02 | Fitness: -0.00 | Turnover: 4.0% | PnL: 📉 -$126.8K
+
+❌ FAIL | -rank(opt6_correletf1m)
+   Sharpe: -0.15 | Fitness: -0.04 | Turnover: 18.7% | PnL: 📉 -$763.7K
+
+
+]
