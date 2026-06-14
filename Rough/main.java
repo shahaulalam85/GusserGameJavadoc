@@ -1,69 +1,13 @@
 
-abstract class Car {
+abstract class A {
 
-    void start() {
-        System.out.println("Car has started");
-    }
+    abstract final void m1();
 
-    abstract void acclerate();
+    abstract static void m2();
 
-    abstract void drive();
+    abstract private void m3();
 
-    void stop() {
-        System.out.println("Car has stoped");
-    }
-}
-
-abstract class Maruti800 extends Car {
-
-    void acclerate() {
-        System.out.println("Car is accelerated at 180km");
-    }
-
-    void drive() {
-        System.out.println("Manual Gear");
-    }
-
-    void combustion() {
-        System.out.println("Petrol Engine");
-    }
-}
-
-abstract class Innova extends Car {
-
-    void acclerate() {
-        System.out.println("Car is accelerated at 240km");
-    }
-
-    void drive() {
-        System.out.println("Automatic Gear");
-    }
-
-    void combustion() {
-        System.out.println("Disel Engine");
-    }
-}
-
-class Ferrari extends Car {
-
-    void acclerate() {
-        System.out.println("Car is accelerated at 340km");
-    }
-
-    void drive() {
-        System.out.println("Tarbo gear system");
-    }
-
-    void combustion() {
-        System.out.println("White Petrol Engine");
-    }
-}
-
-class Road {
-
-    void Permit() {
-
-    }
+    abstract void m4();
 }
 
 class main {

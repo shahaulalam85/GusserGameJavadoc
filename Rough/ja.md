@@ -6129,8 +6129,63 @@ Also called:
 
 
 
+The abstract keyword is the starting point. 
+It can be applied to a class or a method.
+When applied to a class, it means the class cannot be instantiated. 
+You cannot create an object of an abstract class using new. 
+It exists only to be extended by other classes.
+When applied to a method, it means the method has no body — no implementation. 
+It's just a declaration. Any non-abstract subclass that extends an abstract class must provide a concrete implementation of every abstract method, or it too must be declared abstract.
+javaabstract class Shape {
+    abstract double area(); // no body
+}
+If a class has even one abstract method, the class itself must be declared abstract. However, an abstract class is not required to have abstract methods — it can be fully concrete and still declared abstract just to prevent instantiation.
 
 
+1. abstract is a keyword in Java.
+2. It can be applied to a class and a method.
+3. An abstract class cannot be instantiated (object cannot be created using new).
+4. An abstract class is mainly used as a parent class for inheritance.
+5. An abstract method has only a declaration and no implementation (body).
+6. Abstract methods end with a semicolon (;).
+7. If a class contains at least one abstract method, the class must be declared abstract.
+8. A subclass must override and implement all abstract methods of its parent abstract class.
+9. If a subclass does not implement all abstract methods, it must also be declared abstract.
+10. An abstract class can contain:
+            Abstract methods
+            Concrete (normal) methods
+            Constructors
+            Variables
+11. An abstract class may have zero abstract methods.
+12. An abstract class cannot be declared final because it is meant to be inherited.
+13. Abstract methods cannot be private, static, or final.
+14. Abstract classes are used to provide a common template or blueprint for subclasses.
+15. Abstract classes help achieve abstraction by hiding implementation details and 
+    showing only essential features.
+
+
+
+abstract class Vehicle {
+    String brand;
+    int speed;
+
+    Vehicle(String brand, int speed) { // constructor
+        this.brand = brand;
+        this.speed = speed;
+    }
+
+    abstract void fuelType(); // must be implemented by subclass
+
+    void describe() {          // shared concrete behavior
+        System.out.println(brand + " runs at " + speed + " km/h");
+    }
+}
+
+class ElectricCar extends Car {
+    void fuelType() {
+        System.out.println("Runs on electricity");
+    }
+}
 
 
 
