@@ -302,3 +302,202 @@ Testing alphas...
    Sharpe: 1.42 | Fitness: 1.17 | Turnover: 2.2% | PnL: 📈 +$4.21M
 
    ##############################
+
+Testing alphas...
+
+❌ FAIL | 0.5*group_zscore(anl4_bvps_flag, subindustry) - 0.5*rank(mdl53_jc5_1year)
+   Sharpe: 0.88 | Fitness: 0.74 | Turnover: 2.6% | PnL: 📈 +$4.40M
+
+❌ FAIL | 0.5*group_zscore(anl4_bvps_flag, subindustry) + 0.5*rank(mdl53_implied_ratings)
+   Sharpe: 1.08 | Fitness: 0.88 | Turnover: 4.1% | PnL: 📈 +$4.10M
+
+❌ FAIL | 0.5*group_rank(anl4_bvps_flag, subindustry) - 0.5*rank(mdl53_implied_spreads)
+   Sharpe: 0.44 | Fitness: 0.29 | Turnover: 11.6% | PnL: 📈 +$2.60M
+
+❌ FAIL | 0.5*group_rank(ts_mean(anl4_bvps_flag, 20), subindustry) - 0.5*rank(mdl53_jc5_1year)
+   Sharpe: 0.49 | Fitness: 0.33 | Turnover: 3.2% | PnL: 📈 +$2.80M
+
+❌ FAIL | -group_rank(mdl53_jc5_1year, subindustry)
+   Sharpe: 0.04 | Fitness: 0.01 | Turnover: 3.8% | PnL: 📈 +$210.8K
+
+❌ FAIL | -group_zscore(mdl53_implied_spreads, subindustry)
+   Sharpe: -0.07 | Fitness: -0.02 | Turnover: 15.5% | PnL: 📉 -$444.0K
+
+❌ FAIL | -group_rank(mdl53_jc5_5year, subindustry)
+   Sharpe: 0.05 | Fitness: 0.01 | Turnover: 3.1% | PnL: 📈 +$219.7K
+
+❌ FAIL | -group_rank(mdl53_jc5_5year - mdl53_jc5_1year, subindustry)
+   Sharpe: 0.95 | Fitness: 0.59 | Turnover: 5.7% | PnL: 📈 +$2.39M
+
+✅ PASS | 0.5*group_zscore(anl4_bvps_flag, subindustry) - 0.5*rank(mdl53_jc5_5year - mdl53_jc5_1year)
+   Sharpe: 1.26 | Fitness: 1.16 | Turnover: 3.1% | PnL: 📈 +$5.22M failed because of Sub-universe Sharpe of 0.39 is below cutoff of 0.55.
+
+❌ FAIL | -rank(ts_delta(mdl53_jc5_1year, 63))
+   Sharpe: -0.28 | Fitness: -0.11 | Turnover: 11.1% | PnL: 📉 -$1.02M
+
+
+Testing alphas...
+
+❌ FAIL | rank(vec_avg(ern4_30div) - vec_avg(ern4_30dexerniv))
+   Sharpe: 0.20 | Fitness: 0.04 | Turnover: 32.4% | PnL: 📈 +$603.1K
+
+❌ FAIL | rank(vec_avg(ern4_90div) - vec_avg(ern4_90dexerniv))
+   Sharpe: 0.78 | Fitness: 0.23 | Turnover: 39.7% | PnL: 📈 +$1.65M
+
+❌ FAIL | rank(vec_avg(ern4_60div) - vec_avg(ern4_60dexerniv))
+   Sharpe: 0.50 | Fitness: 0.12 | Turnover: 37.3% | PnL: 📈 +$1.09M
+
+❌ FAIL | rank(ts_backfill(vec_avg(ern4_ernmv1), 5))
+   Sharpe: -0.04 | Fitness: -0.00 | Turnover: 3.5% | PnL: 📉 -$65.8K
+
+❌ FAIL | rank(vec_avg(ern4_fcsterneffct))
+   Sharpe: 1.13 | Fitness: 0.87 | Turnover: 6.9% | PnL: 📈 +$3.67M
+
+❌ FAIL | rank(vec_avg(ern4_erneffct1) - vec_avg(ern4_fcsterneffct))
+   Sharpe: -0.67 | Fitness: -0.27 | Turnover: 9.4% | PnL: 📉 -$978.9K
+
+❌ FAIL | rank(vec_avg(ern4_absavgernmv))
+   Sharpe: 0.39 | Fitness: 0.23 | Turnover: 6.9% | PnL: 📈 +$2.07M
+
+❌ FAIL | -rank(vec_avg(ern4_ernmvstdev))
+   Sharpe: -0.48 | Fitness: -0.29 | Turnover: 6.8% | PnL: 📉 -$2.31M
+
+❌ FAIL | rank(vec_avg(ern4_fairvol90d) - vec_avg(ern4_90div))
+   Sharpe: -0.27 | Fitness: -0.06 | Turnover: 34.4% | PnL: 📉 -$720.2K
+
+❌ FAIL | rank(ts_backfill(vec_avg(ern4_ernmv1), 5) - vec_avg(ern4_absavgernmv))
+   Sharpe: -0.39 | Fitness: -0.15 | Turnover: 8.8% | PnL: 📉 -$950.3K
+
+
+Testing alphas...
+
+❌ FAIL | -rank(mdl53_jc5_1year)
+   Sharpe: 0.08 | Fitness: 0.02 | Turnover: 2.5% | PnL: 📈 +$449.0K
+
+❌ FAIL | -rank(mdl53_implied_spreads)
+   Sharpe: -0.01 | Fitness: -0.00 | Turnover: 9.5% | PnL: 📉 -$43.4K
+
+❌ FAIL | rank(mdl53_implied_ratings)
+   Sharpe: 0.23 | Fitness: 0.06 | Turnover: 5.9% | PnL: 📈 +$391.7K
+
+❌ FAIL | -rank(ts_delta(mdl53_jc5_1year, 21))
+   Sharpe: -0.36 | Fitness: -0.15 | Turnover: 15.8% | PnL: 📉 -$1.39M
+
+❌ FAIL | -rank(mdl53_jc5_5year - mdl53_jc5_1year)
+   Sharpe: 0.96 | Fitness: 0.68 | Turnover: 4.0% | PnL: 📈 +$3.10M
+
+❌ FAIL | -rank(ts_delta(mdl53_jc5_5year - mdl53_jc5_1year, 21))
+   Sharpe: 0.10 | Fitness: 0.02 | Turnover: 16.8% | PnL: 📈 +$366.5K
+
+❌ FAIL | -rank(mdl53_jc5_3month)
+   Sharpe: 0.04 | Fitness: 0.01 | Turnover: 2.5% | PnL: 📈 +$238.0K
+
+❌ FAIL | -rank(ts_mean(mdl53_implied_spreads, 20))
+   Sharpe: -0.01 | Fitness: -0.00 | Turnover: 1.8% | PnL: 📉 -$58.9K
+
+❌ FAIL | -group_rank(mdl53_jc5_1year, industry)
+   Sharpe: 0.03 | Fitness: 0.00 | Turnover: 2.9% | PnL: 📈 +$148.0K
+
+❌ FAIL | -rank(mdl53_jc6_1year)
+   Sharpe: -0.03 | Fitness: -0.01 | Turnover: 2.5% | PnL: 📉 -$200.1K
+
+## ###############################
+
+Testing alphas...
+
+❌ FAIL | group_rank(vec_avg(ern4_fcsterneffct), subindustry)
+   Sharpe: 1.11 | Fitness: 0.69 | Turnover: 6.9% | PnL: 📈 +$2.36M
+
+❌ FAIL | group_zscore(vec_avg(ern4_fcsterneffct), subindustry)
+   Sharpe: 1.19 | Fitness: 0.82 | Turnover: 7.3% | PnL: 📈 +$2.92M
+
+❌ FAIL | rank(mdl17_dynamicfocusrank)
+   Sharpe: -0.09 | Fitness: -0.01 | Turnover: 41.4% | PnL: 📉 -$167.1K
+
+❌ FAIL | group_rank(mdl17_dynamicfocusrank, subindustry)
+   Sharpe: 0.01 | Fitness: 0.00 | Turnover: 41.4% | PnL: 📈 +$11.7K
+
+❌ FAIL | group_zscore(mdl17_dynamicfocusrank, subindustry)
+   Sharpe: -0.01 | Fitness: -0.00 | Turnover: 41.4% | PnL: 📉 -$22.6K
+
+❌ FAIL | group_rank(mdl17_score, subindustry)
+   Sharpe: -1.14 | Fitness: -0.25 | Turnover: 41.4% | PnL: 📉 -$997.5K
+
+❌ FAIL | group_zscore(mdl17_score_equityfocusrank, subindustry)
+   Sharpe: -0.54 | Fitness: -0.11 | Turnover: 41.4% | PnL: 📉 -$865.6K
+
+❌ FAIL | -group_rank(mdl17_score_dtstsespe, subindustry)
+   Sharpe: -0.82 | Fitness: -0.20 | Turnover: 41.4% | PnL: 📉 -$1.17M
+
+❌ FAIL | group_rank(mdl17_score_netrec_pct, subindustry)
+   Sharpe: 0.32 | Fitness: 0.03 | Turnover: 41.4% | PnL: 📈 +$232.3K
+
+❌ FAIL | group_rank(mdl17_score_buyrec_pct, subindustry)
+   Sharpe: 0.35 | Fitness: 0.04 | Turnover: 41.4% | PnL: 📈 +$253.9K
+
+
+Testing alphas...
+
+❌ FAIL | -rank(pcr_oi_270)
+   Sharpe: -0.29 | Fitness: -0.09 | Turnover: 8.4% | PnL: 📉 -$588.1K
+
+❌ FAIL | -rank(pcr_oi_180)
+   Sharpe: -0.45 | Fitness: -0.17 | Turnover: 7.4% | PnL: 📉 -$911.9K
+
+❌ FAIL | -rank(pcr_oi_90)
+   Sharpe: -0.09 | Fitness: -0.02 | Turnover: 7.6% | PnL: 📉 -$216.1K
+
+❌ FAIL | rank(unsystematic_risk_last_360_days)
+   Sharpe: -0.08 | Fitness: -0.03 | Turnover: 13.3% | PnL: 📉 -$754.3K
+
+❌ FAIL | rank(unsystematic_risk_last_90_days)
+   Sharpe: -0.14 | Fitness: -0.06 | Turnover: 14.3% | PnL: 📉 -$1.19M
+
+❌ FAIL | -rank(beta_last_60_days_spy)
+   Sharpe: -0.08 | Fitness: -0.03 | Turnover: 13.4% | PnL: 📉 -$781.2K
+
+❌ FAIL | -group_rank(pcr_oi_180, industry)
+   Sharpe: -0.49 | Fitness: -0.20 | Turnover: 7.9% | PnL: 📉 -$984.0K
+
+❌ FAIL | group_rank(unsystematic_risk_last_360_days, industry)
+   Sharpe: 0.01 | Fitness: 0.00 | Turnover: 14.1% | PnL: 📈 +$75.2K
+
+❌ FAIL | -rank(ts_delta(pcr_oi_180, 21))
+   Sharpe: 0.31 | Fitness: 0.07 | Turnover: 14.2% | PnL: 📈 +$343.0K
+
+❌ FAIL | rank(unsystematic_risk_last_90_days) - rank(beta_last_60_days_spy)
+   Sharpe: -0.40 | Fitness: -0.19 | Turnover: 16.4% | PnL: 📉 -$1.86M
+
+Testing alphas...
+
+❌ FAIL | group_rank(analyst_revision_rank_derivative, subindustry)
+   Sharpe: -0.87 | Fitness: -0.60 | Turnover: 2.2% | PnL: 📉 -$2.95M
+
+❌ FAIL | group_zscore(analyst_revision_rank_derivative, subindustry)
+   Sharpe: -0.93 | Fitness: -0.63 | Turnover: 8.6% | PnL: 📉 -$2.81M
+
+❌ FAIL | group_rank(earnings_certainty_rank_derivative, subindustry)
+   Sharpe: -0.86 | Fitness: -0.59 | Turnover: 2.2% | PnL: 📉 -$2.95M
+
+❌ FAIL | group_zscore(earnings_certainty_rank_derivative, subindustry)
+   Sharpe: -0.89 | Fitness: -0.59 | Turnover: 8.2% | PnL: 📉 -$2.73M
+
+❌ FAIL | group_rank(composite_factor_score_derivative, subindustry)
+   Sharpe: -0.89 | Fitness: -0.62 | Turnover: 2.2% | PnL: 📉 -$3.01M
+
+❌ FAIL | group_zscore(composite_factor_score_derivative, subindustry)
+   Sharpe: -0.94 | Fitness: -0.63 | Turnover: 9.3% | PnL: 📉 -$2.79M
+
+❌ FAIL | group_rank(cashflow_efficiency_rank_derivative, subindustry)
+   Sharpe: -0.86 | Fitness: -0.59 | Turnover: 2.2% | PnL: 📉 -$2.93M
+
+❌ FAIL | group_zscore(cashflow_efficiency_rank_derivative, subindustry)
+   Sharpe: -0.86 | Fitness: -0.56 | Turnover: 8.6% | PnL: 📉 -$2.63M
+
+❌ FAIL | group_rank(growth_potential_rank_derivative, subindustry)
+   Sharpe: -0.87 | Fitness: -0.60 | Turnover: 2.2% | PnL: 📉 -$2.98M
+
+❌ FAIL | group_zscore(multi_factor_acceleration_score_derivative, subindustry)
+   Sharpe: -0.94 | Fitness: -0.63 | Turnover: 9.3% | PnL: 📉 -$2.79M
+
+## #######################
